@@ -15,6 +15,11 @@ website:
         - href: posts/avatar_vader.qmd
           text: VADAR Sentiment Scores
       - section: "Unsupervised Learning"
+        contents: 
+        - href: posts/PCA_eu_food.ipynb
+          text: PCA | EU Food
+        - href: posts/ISOMAP_faces.ipynb
+          text: ISOMAP vs PCA
       - section: "Supervised Learning"
       - section: "Data Visualization"
 

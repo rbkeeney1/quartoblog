@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Ryan Keeney – pca_eu_food</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">(Untitled)</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Ryan Keeney</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">About</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">NLP</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/avatar_vader.html" class="sidebar-item-text sidebar-link">VADAR Sentiment Scores</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Unsupervised Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/PCA_eu_food.html" class="sidebar-item-text sidebar-link active">PCA | EU Food</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/ISOMAP_faces.html" class="sidebar-item-text sidebar-link">ISOMAP vs PCA</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">Supervised Learning</span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">Data Visualization</span>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dimensionality-reduction-and-pca" id="toc-dimensionality-reduction-and-pca" class="nav-link active" data-scroll-target="#dimensionality-reduction-and-pca">Dimensionality reduction and PCA</a></li>
+  <li><a href="#pca-by-hand" id="toc-pca-by-hand" class="nav-link" data-scroll-target="#pca-by-hand">PCA, by hand</a></li>
+  <li><a href="#food-consumption-in-european-countries" id="toc-food-consumption-in-european-countries" class="nav-link" data-scroll-target="#food-consumption-in-european-countries">Food consumption in European countries</a></li>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries">Libraries</a></li>
+  <li><a href="#load-and-prep-data" id="toc-load-and-prep-data" class="nav-link" data-scroll-target="#load-and-prep-data">Load and Prep Data</a></li>
+  <li><a href="#normalize-data" id="toc-normalize-data" class="nav-link" data-scroll-target="#normalize-data">Normalize data</a></li>
+  <li><a href="#pca" id="toc-pca" class="nav-link" data-scroll-target="#pca">PCA</a></li>
+  <li><a href="#plot-1" id="toc-plot-1" class="nav-link" data-scroll-target="#plot-1">Plot 1</a></li>
+  <li><a href="#check-correlations-to-dim1-and-dim2" id="toc-check-correlations-to-dim1-and-dim2" class="nav-link" data-scroll-target="#check-correlations-to-dim1-and-dim2">Check correlations to dim1 and dim2</a></li>
+  <li><a href="#flipping-the-analysis" id="toc-flipping-the-analysis" class="nav-link" data-scroll-target="#flipping-the-analysis">Flipping the Analysis</a></li>
+  <li><a href="#libraries-1" id="toc-libraries-1" class="nav-link" data-scroll-target="#libraries-1">Libraries</a></li>
+  <li><a href="#load-and-prep-data-1" id="toc-load-and-prep-data-1" class="nav-link" data-scroll-target="#load-and-prep-data-1">Load and Prep Data</a></li>
+  <li><a href="#normalize-data-1" id="toc-normalize-data-1" class="nav-link" data-scroll-target="#normalize-data-1">Normalize data</a></li>
+  <li><a href="#pca-1" id="toc-pca-1" class="nav-link" data-scroll-target="#pca-1">PCA</a></li>
+  <li><a href="#plot-2-common-and-uncommon-pairings" id="toc-plot-2-common-and-uncommon-pairings" class="nav-link" data-scroll-target="#plot-2-common-and-uncommon-pairings">Plot 2: Common (and uncommon) pairings</a></li>
+  <li><a href="#check-correlations-to-dim1-and-dim2-1" id="toc-check-correlations-to-dim1-and-dim2-1" class="nav-link" data-scroll-target="#check-correlations-to-dim1-and-dim2-1">Check correlations to dim1 and dim2</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="dimensionality-reduction-and-pca" class="level2">
+<h2 class="anchored" data-anchor-id="dimensionality-reduction-and-pca">Dimensionality reduction and PCA</h2>
+<p>PCA is unsupervised learning (contains no label information). It is usually used to explore data and understand patterns and used to set up <strong>clustering</strong> analysis.</p>
+<p>Objective of clustering is to find patterns and relationships within a dataset, such as: - Geometric (feature distances) - Connectivity (spectral clustering, graphs)</p>
+<p>However, the original dimensionally {R^n} can be large! The goal is to reduce it, k≪n!</p>
+<p><strong>Dimensionality reduction</strong> is the process of reducing the number of random variables under consideration - Combine, transform or select variables - Can use linear or nonlinear operations</p>
+<p><strong>PCA</strong>, or prinicpal component analysis, is one common way to perform dimensionality reduction. Dimensionality reduction has many uses in data science: - Visualizing, exploring and understanding the data - Extracting ”features” and dominant modes - Cleaning data - Speeding up subsequent learning task - Building simpler model later</p>
+<p>It has many practical applications as well, such as image/audio compression, face recognition, and natural language processing (latent semantic analysis) to name a few!</p>
+</section>
+<section id="pca-by-hand" class="level2">
+<h2 class="anchored" data-anchor-id="pca-by-hand">PCA, by hand</h2>
+<p><strong>Step 1: Normalize</strong></p>
+<p>Normalize (sometimes called scaling and/or standardizing) your data, especially if the different dimensions contain different scales of data.</p>
+<p><strong>Step 2: Estimate the mean and covariance matrix from the data</strong></p>
+<p>The covariance matrix, C, captures the variability of the data points along different directions, it also captures correlations, covariance between different coordinates (features in the x vector).</p>
+<p><strong>Step 3: Take the largest K eigenvectors of C which correspond to the largest eigenvalues</strong></p>
+<p>Use a solver for this part, such as {eigs} function from scipy.sparse.linalg. In this case, I used K=2 to reduce the data to 2 dimensions.</p>
+<p>C=UΛU^T</p>
+<p>C has d×d dimensions</p>
+<p>U=eigenvectors</p>
+<p><strong>Step 4: Compute the reduced representation of a data point</strong></p>
+<p>Key Concept: PCA is a form of linear reduction scheme, because the prinicpal component <span class="math inline">\(z_i\)</span> is linear transformation of the x.</p>
+</section>
+<section id="food-consumption-in-european-countries" class="level2">
+<h2 class="anchored" data-anchor-id="food-consumption-in-european-countries">Food consumption in European countries</h2>
+<p>This anaylsis uses PCA to compare European countries consumption of various food and drink.</p>
+</section>
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.io <span class="im">as</span> spio</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.sparse.linalg <span class="im">as</span> ll</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.preprocessing <span class="im">as</span> skpp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-and-prep-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-and-prep-data">Load and Prep Data</h2>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import CSV and save it in different dataframes</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>food_consumption <span class="op">=</span> pd.read_csv(<span class="st">"data/food-consumption.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>display(food_consumption)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pull out country list</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> food_consumption[<span class="st">'Country'</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#display(countries)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remove country column, convert to array</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> food_consumption.drop(columns<span class="op">=</span>[<span class="st">'Country'</span>]).to_numpy()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#display(Anew)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># get shape of matrix</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>m, n <span class="op">=</span> Anew.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Country</th>
+      <th>Real coffee</th>
+      <th>Instant coffee</th>
+      <th>Tea</th>
+      <th>Sweetener</th>
+      <th>Biscuits</th>
+      <th>Powder soup</th>
+      <th>Tin soup</th>
+      <th>Potatoes</th>
+      <th>Frozen fish</th>
+      <th>...</th>
+      <th>Apples</th>
+      <th>Oranges</th>
+      <th>Tinned fruit</th>
+      <th>Jam</th>
+      <th>Garlic</th>
+      <th>Butter</th>
+      <th>Margarine</th>
+      <th>Olive oil</th>
+      <th>Yoghurt</th>
+      <th>Crisp bread</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Germany</td>
+      <td>90</td>
+      <td>49</td>
+      <td>88</td>
+      <td>19</td>
+      <td>57</td>
+      <td>51</td>
+      <td>19</td>
+      <td>21</td>
+      <td>27</td>
+      <td>...</td>
+      <td>81</td>
+      <td>75</td>
+      <td>44</td>
+      <td>71</td>
+      <td>22</td>
+      <td>91</td>
+      <td>85</td>
+      <td>74</td>
+      <td>30</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Italy</td>
+      <td>82</td>
+      <td>10</td>
+      <td>60</td>
+      <td>2</td>
+      <td>55</td>
+      <td>41</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>...</td>
+      <td>67</td>
+      <td>71</td>
+      <td>9</td>
+      <td>46</td>
+      <td>80</td>
+      <td>66</td>
+      <td>24</td>
+      <td>94</td>
+      <td>5</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>France</td>
+      <td>88</td>
+      <td>42</td>
+      <td>63</td>
+      <td>4</td>
+      <td>76</td>
+      <td>53</td>
+      <td>11</td>
+      <td>23</td>
+      <td>11</td>
+      <td>...</td>
+      <td>87</td>
+      <td>84</td>
+      <td>40</td>
+      <td>45</td>
+      <td>88</td>
+      <td>94</td>
+      <td>47</td>
+      <td>36</td>
+      <td>57</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Holland</td>
+      <td>96</td>
+      <td>62</td>
+      <td>98</td>
+      <td>32</td>
+      <td>62</td>
+      <td>67</td>
+      <td>43</td>
+      <td>7</td>
+      <td>14</td>
+      <td>...</td>
+      <td>83</td>
+      <td>89</td>
+      <td>61</td>
+      <td>81</td>
+      <td>15</td>
+      <td>31</td>
+      <td>97</td>
+      <td>13</td>
+      <td>53</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Belgium</td>
+      <td>94</td>
+      <td>38</td>
+      <td>48</td>
+      <td>11</td>
+      <td>74</td>
+      <td>37</td>
+      <td>23</td>
+      <td>9</td>
+      <td>13</td>
+      <td>...</td>
+      <td>76</td>
+      <td>76</td>
+      <td>42</td>
+      <td>57</td>
+      <td>29</td>
+      <td>84</td>
+      <td>80</td>
+      <td>83</td>
+      <td>20</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Luxembourg</td>
+      <td>97</td>
+      <td>61</td>
+      <td>86</td>
+      <td>28</td>
+      <td>79</td>
+      <td>73</td>
+      <td>12</td>
+      <td>7</td>
+      <td>26</td>
+      <td>...</td>
+      <td>85</td>
+      <td>94</td>
+      <td>83</td>
+      <td>20</td>
+      <td>91</td>
+      <td>94</td>
+      <td>94</td>
+      <td>84</td>
+      <td>31</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>England</td>
+      <td>27</td>
+      <td>86</td>
+      <td>99</td>
+      <td>22</td>
+      <td>91</td>
+      <td>55</td>
+      <td>76</td>
+      <td>17</td>
+      <td>20</td>
+      <td>...</td>
+      <td>76</td>
+      <td>68</td>
+      <td>89</td>
+      <td>91</td>
+      <td>11</td>
+      <td>95</td>
+      <td>94</td>
+      <td>57</td>
+      <td>11</td>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Portugal</td>
+      <td>72</td>
+      <td>26</td>
+      <td>77</td>
+      <td>2</td>
+      <td>22</td>
+      <td>34</td>
+      <td>1</td>
+      <td>5</td>
+      <td>20</td>
+      <td>...</td>
+      <td>22</td>
+      <td>51</td>
+      <td>8</td>
+      <td>16</td>
+      <td>89</td>
+      <td>65</td>
+      <td>78</td>
+      <td>92</td>
+      <td>6</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Austria</td>
+      <td>55</td>
+      <td>31</td>
+      <td>61</td>
+      <td>15</td>
+      <td>29</td>
+      <td>33</td>
+      <td>1</td>
+      <td>5</td>
+      <td>15</td>
+      <td>...</td>
+      <td>49</td>
+      <td>42</td>
+      <td>14</td>
+      <td>41</td>
+      <td>51</td>
+      <td>51</td>
+      <td>72</td>
+      <td>28</td>
+      <td>13</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Switzerland</td>
+      <td>73</td>
+      <td>72</td>
+      <td>85</td>
+      <td>25</td>
+      <td>31</td>
+      <td>69</td>
+      <td>10</td>
+      <td>17</td>
+      <td>19</td>
+      <td>...</td>
+      <td>79</td>
+      <td>70</td>
+      <td>46</td>
+      <td>61</td>
+      <td>64</td>
+      <td>82</td>
+      <td>48</td>
+      <td>61</td>
+      <td>48</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Sweden</td>
+      <td>97</td>
+      <td>13</td>
+      <td>93</td>
+      <td>31</td>
+      <td>61</td>
+      <td>43</td>
+      <td>43</td>
+      <td>39</td>
+      <td>54</td>
+      <td>...</td>
+      <td>56</td>
+      <td>78</td>
+      <td>53</td>
+      <td>75</td>
+      <td>9</td>
+      <td>68</td>
+      <td>32</td>
+      <td>48</td>
+      <td>2</td>
+      <td>93</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Denmark</td>
+      <td>96</td>
+      <td>17</td>
+      <td>92</td>
+      <td>35</td>
+      <td>66</td>
+      <td>32</td>
+      <td>17</td>
+      <td>11</td>
+      <td>51</td>
+      <td>...</td>
+      <td>81</td>
+      <td>72</td>
+      <td>50</td>
+      <td>64</td>
+      <td>11</td>
+      <td>92</td>
+      <td>91</td>
+      <td>30</td>
+      <td>11</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Norway</td>
+      <td>92</td>
+      <td>17</td>
+      <td>83</td>
+      <td>13</td>
+      <td>62</td>
+      <td>51</td>
+      <td>4</td>
+      <td>17</td>
+      <td>30</td>
+      <td>...</td>
+      <td>61</td>
+      <td>72</td>
+      <td>34</td>
+      <td>51</td>
+      <td>11</td>
+      <td>63</td>
+      <td>94</td>
+      <td>28</td>
+      <td>2</td>
+      <td>62</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Finland</td>
+      <td>98</td>
+      <td>12</td>
+      <td>84</td>
+      <td>20</td>
+      <td>64</td>
+      <td>27</td>
+      <td>10</td>
+      <td>8</td>
+      <td>18</td>
+      <td>...</td>
+      <td>50</td>
+      <td>57</td>
+      <td>22</td>
+      <td>37</td>
+      <td>15</td>
+      <td>96</td>
+      <td>94</td>
+      <td>17</td>
+      <td>21</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Spain</td>
+      <td>70</td>
+      <td>40</td>
+      <td>40</td>
+      <td>18</td>
+      <td>62</td>
+      <td>43</td>
+      <td>2</td>
+      <td>14</td>
+      <td>23</td>
+      <td>...</td>
+      <td>59</td>
+      <td>77</td>
+      <td>30</td>
+      <td>38</td>
+      <td>86</td>
+      <td>44</td>
+      <td>51</td>
+      <td>91</td>
+      <td>16</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Ireland</td>
+      <td>30</td>
+      <td>52</td>
+      <td>99</td>
+      <td>11</td>
+      <td>80</td>
+      <td>75</td>
+      <td>18</td>
+      <td>2</td>
+      <td>5</td>
+      <td>...</td>
+      <td>57</td>
+      <td>52</td>
+      <td>46</td>
+      <td>89</td>
+      <td>5</td>
+      <td>97</td>
+      <td>25</td>
+      <td>31</td>
+      <td>3</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+<p>16 rows × 21 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="normalize-data" class="level2">
+<h2 class="anchored" data-anchor-id="normalize-data">Normalize data</h2>
+<p>In this case, we normalize the data because features have very different ranges</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stdA <span class="op">=</span> np.std(Anew,axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> Anew <span class="op">@</span> np.diag(np.ones(stdA.shape[<span class="dv">0</span>])<span class="op">/</span>stdA)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> Anew.T</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#display(pd.DataFrame(Anew))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pca" class="level2">
+<h2 class="anchored" data-anchor-id="pca">PCA</h2>
+<p>Here, we extract the first two dimensions following the steps listed above.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> np.mean(Anew,axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>xc <span class="op">=</span> Anew <span class="op">-</span> mu[:,<span class="va">None</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.dot(xc,xc.T)<span class="op">/</span>m</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>K<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>S,W <span class="op">=</span> ll.eigs(C,k <span class="op">=</span> K)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> S.real</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> W.real</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>dim1 <span class="op">=</span> np.dot(W[:,<span class="dv">0</span>].T,xc)<span class="op">/</span>math.sqrt(S[<span class="dv">0</span>]) <span class="co"># extract 1st eigenvalues</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>dim2 <span class="op">=</span> np.dot(W[:,<span class="dv">1</span>].T,xc)<span class="op">/</span>math.sqrt(S[<span class="dv">1</span>]) <span class="co"># extract 2nd eigenvalue</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-1" class="level2">
+<h2 class="anchored" data-anchor-id="plot-1">Plot 1</h2>
+<p>The location of the countries does seem logical (countries close to one another are likely to consume similar foods) – Nordic countries are grouped together, as are countries in the S-SW (Portugal, Spain, Italy) with a likely strong Mediterranean influence. Additionally, countries in central Europe are grouped (Germany, Belgium, Switzerland).</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">7</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"dim1"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"dim2"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.plot(dim1, dim2, <span class="st">'r.'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># add labels</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, countries.shape[<span class="dv">0</span>]):</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    plt.text(dim1[i], dim2[i] <span class="op">+</span> <span class="fl">0.01</span>, countries[i])</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="PCA_eu_food_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="check-correlations-to-dim1-and-dim2" class="level2">
+<h2 class="anchored" data-anchor-id="check-correlations-to-dim1-and-dim2">Check correlations to dim1 and dim2</h2>
+<p>Dimension 1 (PC 1) is highly correlated to countries with high consumption of tea, sweetener, tin soup, frozen veggies, and tinned fruit. Dimension 2 is highly correlated with high consumption of instant coffee, powder soup, and low consumption of frozen fish and crisp bread).</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add dim1 and dim2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>food_consumption[<span class="st">'dim1'</span>] <span class="op">=</span> dim1.tolist()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>food_consumption[<span class="st">'dim2'</span>] <span class="op">=</span> dim2.tolist()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>display(food_consumption.drop(columns<span class="op">=</span>[<span class="st">'Country'</span>]).corr(method<span class="op">=</span><span class="st">'pearson'</span>).tail(<span class="dv">2</span>).style.<span class="bu">format</span>(<span class="st">'{0:,.2f}'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+</style><table id="T_2b749_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">Real coffee</th>        <th class="col_heading level0 col1">Instant coffee</th>        <th class="col_heading level0 col2">Tea</th>        <th class="col_heading level0 col3">Sweetener</th>        <th class="col_heading level0 col4">Biscuits</th>        <th class="col_heading level0 col5">Powder soup</th>        <th class="col_heading level0 col6">Tin soup</th>        <th class="col_heading level0 col7">Potatoes</th>        <th class="col_heading level0 col8">Frozen fish</th>        <th class="col_heading level0 col9">Frozen veggies</th>        <th class="col_heading level0 col10">Apples</th>        <th class="col_heading level0 col11">Oranges</th>        <th class="col_heading level0 col12">Tinned fruit</th>        <th class="col_heading level0 col13">Jam</th>        <th class="col_heading level0 col14">Garlic</th>        <th class="col_heading level0 col15">Butter</th>        <th class="col_heading level0 col16">Margarine</th>        <th class="col_heading level0 col17">Olive oil</th>        <th class="col_heading level0 col18">Yoghurt</th>        <th class="col_heading level0 col19">Crisp bread</th>        <th class="col_heading level0 col20">dim1</th>        <th class="col_heading level0 col21">dim2</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_2b749_level0_row0" class="row_heading level0 row0">dim1</th>
+                        <td id="T_2b749_row0_col0" class="data row0 col0">0.08</td>
+                        <td id="T_2b749_row0_col1" class="data row0 col1">0.43</td>
+                        <td id="T_2b749_row0_col2" class="data row0 col2">0.70</td>
+                        <td id="T_2b749_row0_col3" class="data row0 col3">0.78</td>
+                        <td id="T_2b749_row0_col4" class="data row0 col4">0.58</td>
+                        <td id="T_2b749_row0_col5" class="data row0 col5">0.43</td>
+                        <td id="T_2b749_row0_col6" class="data row0 col6">0.77</td>
+                        <td id="T_2b749_row0_col7" class="data row0 col7">0.51</td>
+                        <td id="T_2b749_row0_col8" class="data row0 col8">0.51</td>
+                        <td id="T_2b749_row0_col9" class="data row0 col9">0.75</td>
+                        <td id="T_2b749_row0_col10" class="data row0 col10">0.61</td>
+                        <td id="T_2b749_row0_col11" class="data row0 col11">0.51</td>
+                        <td id="T_2b749_row0_col12" class="data row0 col12">0.88</td>
+                        <td id="T_2b749_row0_col13" class="data row0 col13">0.68</td>
+                        <td id="T_2b749_row0_col14" class="data row0 col14">-0.61</td>
+                        <td id="T_2b749_row0_col15" class="data row0 col15">0.29</td>
+                        <td id="T_2b749_row0_col16" class="data row0 col16">0.30</td>
+                        <td id="T_2b749_row0_col17" class="data row0 col17">-0.38</td>
+                        <td id="T_2b749_row0_col18" class="data row0 col18">0.21</td>
+                        <td id="T_2b749_row0_col19" class="data row0 col19">0.43</td>
+                        <td id="T_2b749_row0_col20" class="data row0 col20">1.00</td>
+                        <td id="T_2b749_row0_col21" class="data row0 col21">0.00</td>
+            </tr>
+            <tr>
+                        <th id="T_2b749_level0_row1" class="row_heading level0 row1">dim2</th>
+                        <td id="T_2b749_row1_col0" class="data row1 col0">-0.39</td>
+                        <td id="T_2b749_row1_col1" class="data row1 col1">0.78</td>
+                        <td id="T_2b749_row1_col2" class="data row1 col2">-0.09</td>
+                        <td id="T_2b749_row1_col3" class="data row1 col3">-0.23</td>
+                        <td id="T_2b749_row1_col4" class="data row1 col4">0.30</td>
+                        <td id="T_2b749_row1_col5" class="data row1 col5">0.68</td>
+                        <td id="T_2b749_row1_col6" class="data row1 col6">0.13</td>
+                        <td id="T_2b749_row1_col7" class="data row1 col7">-0.36</td>
+                        <td id="T_2b749_row1_col8" class="data row1 col8">-0.72</td>
+                        <td id="T_2b749_row1_col9" class="data row1 col9">-0.54</td>
+                        <td id="T_2b749_row1_col10" class="data row1 col10">0.48</td>
+                        <td id="T_2b749_row1_col11" class="data row1 col11">0.26</td>
+                        <td id="T_2b749_row1_col12" class="data row1 col12">0.35</td>
+                        <td id="T_2b749_row1_col13" class="data row1 col13">0.13</td>
+                        <td id="T_2b749_row1_col14" class="data row1 col14">0.36</td>
+                        <td id="T_2b749_row1_col15" class="data row1 col15">0.13</td>
+                        <td id="T_2b749_row1_col16" class="data row1 col16">-0.08</td>
+                        <td id="T_2b749_row1_col17" class="data row1 col17">0.21</td>
+                        <td id="T_2b749_row1_col18" class="data row1 col18">0.55</td>
+                        <td id="T_2b749_row1_col19" class="data row1 col19">-0.76</td>
+                        <td id="T_2b749_row1_col20" class="data row1 col20">0.00</td>
+                        <td id="T_2b749_row1_col21" class="data row1 col21">1.00</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+</section>
+<section id="flipping-the-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="flipping-the-analysis">Flipping the Analysis</h2>
+<p>In the analysis above, we looked at which countries were similar to one another based on their food consumptions. In the next set of analysis, we will look at how foods are related to another based on the countries were they are eaten.</p>
+<p>If part 1 was comparing culinary culures by country, this next analysis can be thought of as comparing how common (or uncommon) food pairings are.</p>
+<p>First, let’s treat this as a completely new problem and reset our notebook.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>reset <span class="op">-</span>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="libraries-1" class="level2">
+<h2 class="anchored" data-anchor-id="libraries-1">Libraries</h2>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.io <span class="im">as</span> spio</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.sparse.linalg <span class="im">as</span> ll</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.preprocessing <span class="im">as</span> skpp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-and-prep-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="load-and-prep-data-1">Load and Prep Data</h2>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import CSV and save it in different dataframes</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>food_consumption <span class="op">=</span> pd.read_csv(<span class="st">"data/food-consumption.csv"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transpose df</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>food_consumption <span class="op">=</span> food_consumption.set_index(<span class="st">'Country'</span>).T.rename_axis(index<span class="op">=</span><span class="st">'Food Item'</span>, columns<span class="op">=</span><span class="va">None</span>).reset_index()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>display(food_consumption)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># pull out country list</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>food_items <span class="op">=</span> food_consumption[<span class="st">'Food Item'</span>]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#display(food_items)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># remove food item column, convert to array</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> food_consumption.drop(columns<span class="op">=</span>[<span class="st">'Food Item'</span>]).to_numpy()</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#display(Anew)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># get shape of matrix</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>m, n <span class="op">=</span> Anew.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Food Item</th>
+      <th>Germany</th>
+      <th>Italy</th>
+      <th>France</th>
+      <th>Holland</th>
+      <th>Belgium</th>
+      <th>Luxembourg</th>
+      <th>England</th>
+      <th>Portugal</th>
+      <th>Austria</th>
+      <th>Switzerland</th>
+      <th>Sweden</th>
+      <th>Denmark</th>
+      <th>Norway</th>
+      <th>Finland</th>
+      <th>Spain</th>
+      <th>Ireland</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Real coffee</td>
+      <td>90</td>
+      <td>82</td>
+      <td>88</td>
+      <td>96</td>
+      <td>94</td>
+      <td>97</td>
+      <td>27</td>
+      <td>72</td>
+      <td>55</td>
+      <td>73</td>
+      <td>97</td>
+      <td>96</td>
+      <td>92</td>
+      <td>98</td>
+      <td>70</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Instant coffee</td>
+      <td>49</td>
+      <td>10</td>
+      <td>42</td>
+      <td>62</td>
+      <td>38</td>
+      <td>61</td>
+      <td>86</td>
+      <td>26</td>
+      <td>31</td>
+      <td>72</td>
+      <td>13</td>
+      <td>17</td>
+      <td>17</td>
+      <td>12</td>
+      <td>40</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Tea</td>
+      <td>88</td>
+      <td>60</td>
+      <td>63</td>
+      <td>98</td>
+      <td>48</td>
+      <td>86</td>
+      <td>99</td>
+      <td>77</td>
+      <td>61</td>
+      <td>85</td>
+      <td>93</td>
+      <td>92</td>
+      <td>83</td>
+      <td>84</td>
+      <td>40</td>
+      <td>99</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sweetener</td>
+      <td>19</td>
+      <td>2</td>
+      <td>4</td>
+      <td>32</td>
+      <td>11</td>
+      <td>28</td>
+      <td>22</td>
+      <td>2</td>
+      <td>15</td>
+      <td>25</td>
+      <td>31</td>
+      <td>35</td>
+      <td>13</td>
+      <td>20</td>
+      <td>18</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Biscuits</td>
+      <td>57</td>
+      <td>55</td>
+      <td>76</td>
+      <td>62</td>
+      <td>74</td>
+      <td>79</td>
+      <td>91</td>
+      <td>22</td>
+      <td>29</td>
+      <td>31</td>
+      <td>61</td>
+      <td>66</td>
+      <td>62</td>
+      <td>64</td>
+      <td>62</td>
+      <td>80</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Powder soup</td>
+      <td>51</td>
+      <td>41</td>
+      <td>53</td>
+      <td>67</td>
+      <td>37</td>
+      <td>73</td>
+      <td>55</td>
+      <td>34</td>
+      <td>33</td>
+      <td>69</td>
+      <td>43</td>
+      <td>32</td>
+      <td>51</td>
+      <td>27</td>
+      <td>43</td>
+      <td>75</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Tin soup</td>
+      <td>19</td>
+      <td>3</td>
+      <td>11</td>
+      <td>43</td>
+      <td>23</td>
+      <td>12</td>
+      <td>76</td>
+      <td>1</td>
+      <td>1</td>
+      <td>10</td>
+      <td>43</td>
+      <td>17</td>
+      <td>4</td>
+      <td>10</td>
+      <td>2</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Potatoes</td>
+      <td>21</td>
+      <td>2</td>
+      <td>23</td>
+      <td>7</td>
+      <td>9</td>
+      <td>7</td>
+      <td>17</td>
+      <td>5</td>
+      <td>5</td>
+      <td>17</td>
+      <td>39</td>
+      <td>11</td>
+      <td>17</td>
+      <td>8</td>
+      <td>14</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Frozen fish</td>
+      <td>27</td>
+      <td>4</td>
+      <td>11</td>
+      <td>14</td>
+      <td>13</td>
+      <td>26</td>
+      <td>20</td>
+      <td>20</td>
+      <td>15</td>
+      <td>19</td>
+      <td>54</td>
+      <td>51</td>
+      <td>30</td>
+      <td>18</td>
+      <td>23</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Frozen veggies</td>
+      <td>21</td>
+      <td>2</td>
+      <td>5</td>
+      <td>14</td>
+      <td>12</td>
+      <td>23</td>
+      <td>24</td>
+      <td>3</td>
+      <td>11</td>
+      <td>15</td>
+      <td>45</td>
+      <td>42</td>
+      <td>15</td>
+      <td>12</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Apples</td>
+      <td>81</td>
+      <td>67</td>
+      <td>87</td>
+      <td>83</td>
+      <td>76</td>
+      <td>85</td>
+      <td>76</td>
+      <td>22</td>
+      <td>49</td>
+      <td>79</td>
+      <td>56</td>
+      <td>81</td>
+      <td>61</td>
+      <td>50</td>
+      <td>59</td>
+      <td>57</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Oranges</td>
+      <td>75</td>
+      <td>71</td>
+      <td>84</td>
+      <td>89</td>
+      <td>76</td>
+      <td>94</td>
+      <td>68</td>
+      <td>51</td>
+      <td>42</td>
+      <td>70</td>
+      <td>78</td>
+      <td>72</td>
+      <td>72</td>
+      <td>57</td>
+      <td>77</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Tinned fruit</td>
+      <td>44</td>
+      <td>9</td>
+      <td>40</td>
+      <td>61</td>
+      <td>42</td>
+      <td>83</td>
+      <td>89</td>
+      <td>8</td>
+      <td>14</td>
+      <td>46</td>
+      <td>53</td>
+      <td>50</td>
+      <td>34</td>
+      <td>22</td>
+      <td>30</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Jam</td>
+      <td>71</td>
+      <td>46</td>
+      <td>45</td>
+      <td>81</td>
+      <td>57</td>
+      <td>20</td>
+      <td>91</td>
+      <td>16</td>
+      <td>41</td>
+      <td>61</td>
+      <td>75</td>
+      <td>64</td>
+      <td>51</td>
+      <td>37</td>
+      <td>38</td>
+      <td>89</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Garlic</td>
+      <td>22</td>
+      <td>80</td>
+      <td>88</td>
+      <td>15</td>
+      <td>29</td>
+      <td>91</td>
+      <td>11</td>
+      <td>89</td>
+      <td>51</td>
+      <td>64</td>
+      <td>9</td>
+      <td>11</td>
+      <td>11</td>
+      <td>15</td>
+      <td>86</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Butter</td>
+      <td>91</td>
+      <td>66</td>
+      <td>94</td>
+      <td>31</td>
+      <td>84</td>
+      <td>94</td>
+      <td>95</td>
+      <td>65</td>
+      <td>51</td>
+      <td>82</td>
+      <td>68</td>
+      <td>92</td>
+      <td>63</td>
+      <td>96</td>
+      <td>44</td>
+      <td>97</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Margarine</td>
+      <td>85</td>
+      <td>24</td>
+      <td>47</td>
+      <td>97</td>
+      <td>80</td>
+      <td>94</td>
+      <td>94</td>
+      <td>78</td>
+      <td>72</td>
+      <td>48</td>
+      <td>32</td>
+      <td>91</td>
+      <td>94</td>
+      <td>94</td>
+      <td>51</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Olive oil</td>
+      <td>74</td>
+      <td>94</td>
+      <td>36</td>
+      <td>13</td>
+      <td>83</td>
+      <td>84</td>
+      <td>57</td>
+      <td>92</td>
+      <td>28</td>
+      <td>61</td>
+      <td>48</td>
+      <td>30</td>
+      <td>28</td>
+      <td>17</td>
+      <td>91</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Yoghurt</td>
+      <td>30</td>
+      <td>5</td>
+      <td>57</td>
+      <td>53</td>
+      <td>20</td>
+      <td>31</td>
+      <td>11</td>
+      <td>6</td>
+      <td>13</td>
+      <td>48</td>
+      <td>2</td>
+      <td>11</td>
+      <td>2</td>
+      <td>21</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Crisp bread</td>
+      <td>26</td>
+      <td>18</td>
+      <td>3</td>
+      <td>15</td>
+      <td>5</td>
+      <td>24</td>
+      <td>28</td>
+      <td>9</td>
+      <td>11</td>
+      <td>30</td>
+      <td>93</td>
+      <td>34</td>
+      <td>62</td>
+      <td>64</td>
+      <td>13</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="normalize-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="normalize-data-1">Normalize data</h2>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In this case, we normalize the data because features have very different ranges</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>stdA <span class="op">=</span> np.std(Anew,axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> Anew <span class="op">@</span> np.diag(np.ones(stdA.shape[<span class="dv">0</span>])<span class="op">/</span>stdA)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>Anew <span class="op">=</span> Anew.T</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#display(pd.DataFrame(Anew))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pca-1" class="level2">
+<h2 class="anchored" data-anchor-id="pca-1">PCA</h2>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> np.mean(Anew,axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xc <span class="op">=</span> Anew <span class="op">-</span> mu[:,<span class="va">None</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.dot(xc,xc.T)<span class="op">/</span>m</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>K<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>S,W <span class="op">=</span> ll.eigs(C,k <span class="op">=</span> K)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> S.real</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> W.real</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>dim1 <span class="op">=</span> np.dot(W[:,<span class="dv">0</span>].T,xc)<span class="op">/</span>math.sqrt(S[<span class="dv">0</span>]) <span class="co"># extract 1st eigenvalues</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>dim2 <span class="op">=</span> np.dot(W[:,<span class="dv">1</span>].T,xc)<span class="op">/</span>math.sqrt(S[<span class="dv">1</span>]) <span class="co"># extract 2nd eigenvalue</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(20,)</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-2-common-and-uncommon-pairings" class="level2">
+<h2 class="anchored" data-anchor-id="plot-2-common-and-uncommon-pairings">Plot 2: Common (and uncommon) pairings</h2>
+<p>The location of the foods does seem logical (similar foods or ‘compatible’ foods are grouped together). Fresh fruit such as apples and oranges are grouped. So are common toppings such as jam, margarine, butter, and what they are put on (biscuits). Garlic and olive oil are loosely grouped and separated. Visually inspecting the graph, it seems that PC1 can be described as fish vs.&nbsp;high caffine (coffee, tea) intake and PC2 can be described by how much garlic and olive oil are apart of the diet for a country.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">7</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"dim1"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"dim2"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.plot(dim1, dim2, <span class="st">'r.'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># add labels</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, food_items.shape[<span class="dv">0</span>]):</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    plt.text(dim1[i], dim2[i] <span class="op">+</span> <span class="fl">0.01</span>, food_items[i])</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="PCA_eu_food_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="check-correlations-to-dim1-and-dim2-1" class="level2">
+<h2 class="anchored" data-anchor-id="check-correlations-to-dim1-and-dim2-1">Check correlations to dim1 and dim2</h2>
+<p>Dimension 1 (PC 1) is highly correlated to food consumption areas like Germany, although it also has mild to strong correlations to many of the countries – indicating that this is indeed the dimension upon variation is maximized. Dimension 2 is most highly correlated to Sweden (positive) and Spain (negative).</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add dim1 and dim2</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>food_consumption[<span class="st">'dim1'</span>] <span class="op">=</span> dim1.tolist()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>food_consumption[<span class="st">'dim2'</span>] <span class="op">=</span> dim2.tolist()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>display(food_consumption.drop(columns<span class="op">=</span>[<span class="st">'Food Item'</span>]).corr(method<span class="op">=</span><span class="st">'pearson'</span>).tail(<span class="dv">2</span>).style.<span class="bu">format</span>(<span class="st">'{0:,.2f}'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style type="text/css">
+</style><table id="T_b9a1b_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">Germany</th>        <th class="col_heading level0 col1">Italy</th>        <th class="col_heading level0 col2">France</th>        <th class="col_heading level0 col3">Holland</th>        <th class="col_heading level0 col4">Belgium</th>        <th class="col_heading level0 col5">Luxembourg</th>        <th class="col_heading level0 col6">England</th>        <th class="col_heading level0 col7">Portugal</th>        <th class="col_heading level0 col8">Austria</th>        <th class="col_heading level0 col9">Switzerland</th>        <th class="col_heading level0 col10">Sweden</th>        <th class="col_heading level0 col11">Denmark</th>        <th class="col_heading level0 col12">Norway</th>        <th class="col_heading level0 col13">Finland</th>        <th class="col_heading level0 col14">Spain</th>        <th class="col_heading level0 col15">Ireland</th>        <th class="col_heading level0 col16">dim1</th>        <th class="col_heading level0 col17">dim2</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_b9a1b_level0_row0" class="row_heading level0 row0">dim1</th>
+                        <td id="T_b9a1b_row0_col0" class="data row0 col0">0.95</td>
+                        <td id="T_b9a1b_row0_col1" class="data row0 col1">0.80</td>
+                        <td id="T_b9a1b_row0_col2" class="data row0 col2">0.80</td>
+                        <td id="T_b9a1b_row0_col3" class="data row0 col3">0.70</td>
+                        <td id="T_b9a1b_row0_col4" class="data row0 col4">0.90</td>
+                        <td id="T_b9a1b_row0_col5" class="data row0 col5">0.86</td>
+                        <td id="T_b9a1b_row0_col6" class="data row0 col6">0.60</td>
+                        <td id="T_b9a1b_row0_col7" class="data row0 col7">0.73</td>
+                        <td id="T_b9a1b_row0_col8" class="data row0 col8">0.89</td>
+                        <td id="T_b9a1b_row0_col9" class="data row0 col9">0.82</td>
+                        <td id="T_b9a1b_row0_col10" class="data row0 col10">0.49</td>
+                        <td id="T_b9a1b_row0_col11" class="data row0 col11">0.82</td>
+                        <td id="T_b9a1b_row0_col12" class="data row0 col12">0.84</td>
+                        <td id="T_b9a1b_row0_col13" class="data row0 col13">0.80</td>
+                        <td id="T_b9a1b_row0_col14" class="data row0 col14">0.73</td>
+                        <td id="T_b9a1b_row0_col15" class="data row0 col15">0.70</td>
+                        <td id="T_b9a1b_row0_col16" class="data row0 col16">1.00</td>
+                        <td id="T_b9a1b_row0_col17" class="data row0 col17">0.00</td>
+            </tr>
+            <tr>
+                        <th id="T_b9a1b_level0_row1" class="row_heading level0 row1">dim2</th>
+                        <td id="T_b9a1b_row1_col0" class="data row1 col0">0.13</td>
+                        <td id="T_b9a1b_row1_col1" class="data row1 col1">-0.42</td>
+                        <td id="T_b9a1b_row1_col2" class="data row1 col2">-0.32</td>
+                        <td id="T_b9a1b_row1_col3" class="data row1 col3">0.33</td>
+                        <td id="T_b9a1b_row1_col4" class="data row1 col4">-0.07</td>
+                        <td id="T_b9a1b_row1_col5" class="data row1 col5">-0.33</td>
+                        <td id="T_b9a1b_row1_col6" class="data row1 col6">0.40</td>
+                        <td id="T_b9a1b_row1_col7" class="data row1 col7">-0.49</td>
+                        <td id="T_b9a1b_row1_col8" class="data row1 col8">-0.13</td>
+                        <td id="T_b9a1b_row1_col9" class="data row1 col9">-0.24</td>
+                        <td id="T_b9a1b_row1_col10" class="data row1 col10">0.56</td>
+                        <td id="T_b9a1b_row1_col11" class="data row1 col11">0.43</td>
+                        <td id="T_b9a1b_row1_col12" class="data row1 col12">0.38</td>
+                        <td id="T_b9a1b_row1_col13" class="data row1 col13">0.35</td>
+                        <td id="T_b9a1b_row1_col14" class="data row1 col14">-0.60</td>
+                        <td id="T_b9a1b_row1_col15" class="data row1 col15">0.31</td>
+                        <td id="T_b9a1b_row1_col16" class="data row1 col16">0.00</td>
+                        <td id="T_b9a1b_row1_col17" class="data row1 col17">1.00</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

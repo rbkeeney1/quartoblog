@@ -17,7 +17,7 @@ about:
 ---
 
 ::: {#hero-heading}
-Ryan Keeney is the Data Science graduate from Georgia Tech with experience in R, Python, and SQL. When not innovating on data platforms, Ryan enjoys spending time traveling, teaching, volunteering, and spending quality time with family and friends.
+Ryan Keeney is a data science graduate from Georgia Tech with experience in R, Python, and SQL. When not innovating on data platforms, Ryan enjoys spending time traveling, teaching, volunteering, and spending quality time with family and friends.
 
 ## Education
 
@@ -31,7 +31,7 @@ BSE in Mechanical Engineering \| Sept 2009 - April 2014
 
 ## Experience
 
-**John Deere** \| Product Design Engineer, Product Marketing Manager \| May 2014 - June 2020
+**John Deere** \| Design Engineer, Product Marketing Manager \| May 2014 - June 2020
 
 **American School of Asuncion** \| Math and Science Teacher \| Sept 2012 - April 2018
 
