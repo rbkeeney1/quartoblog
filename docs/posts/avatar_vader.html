@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ryan Keeney">
+
+<title>Ryan Keeney - Avatar VADER Sentiment Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Avatar VADER Sentiment Analysis</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Ryan Keeney</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">About</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">NLP</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/avatar_vader.html" class="sidebar-item-text sidebar-link active">VADAR Sentiment Scores</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">Unsupervised Learning</span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">Supervised Learning</span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">Data Visualization</span>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tidytuesday---avitar-and-vader-sentiment-scores" id="toc-tidytuesday---avitar-and-vader-sentiment-scores" class="nav-link active" data-scroll-target="#tidytuesday---avitar-and-vader-sentiment-scores">TidyTuesday - Avitar and Vader Sentiment Scores</a></li>
+  <li><a href="#initial-libraries-and-load-data" id="toc-initial-libraries-and-load-data" class="nav-link" data-scroll-target="#initial-libraries-and-load-data">Initial libraries and load data</a></li>
+  <li><a href="#who-speaks-the-most-often" id="toc-who-speaks-the-most-often" class="nav-link" data-scroll-target="#who-speaks-the-most-often">Who speaks the most often?</a></li>
+  <li><a href="#data-prep" id="toc-data-prep" class="nav-link" data-scroll-target="#data-prep">Data Prep</a></li>
+  <li><a href="#vader-compound-scores" id="toc-vader-compound-scores" class="nav-link" data-scroll-target="#vader-compound-scores">VADER compound scores</a>
+  <ul class="collapse">
+  <li><a href="#step-1-sentences.-yip-yip" id="toc-step-1-sentences.-yip-yip" class="nav-link" data-scroll-target="#step-1-sentences.-yip-yip">Step 1: Sentences. Yip yip!</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#step-3-cross-fingers-run-vader-make-coffee" id="toc-step-3-cross-fingers-run-vader-make-coffee" class="nav-link" data-scroll-target="#step-3-cross-fingers-run-vader-make-coffee">Step 3: Cross fingers, Run Vader, Make Coffee</a></li>
+  <li><a href="#step-4-bind" id="toc-step-4-bind" class="nav-link" data-scroll-target="#step-4-bind">Step 4: Bind</a></li>
+  </ul></li>
+  <li><a href="#plot-prep" id="toc-plot-prep" class="nav-link" data-scroll-target="#plot-prep">Plot Prep</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#ggplot-bending" id="toc-ggplot-bending" class="nav-link" data-scroll-target="#ggplot-bending">ggplot “Bending”</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Avatar VADER Sentiment Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ryan Keeney </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="tidytuesday---avitar-and-vader-sentiment-scores" class="level2">
+<h2 class="anchored" data-anchor-id="tidytuesday---avitar-and-vader-sentiment-scores">TidyTuesday - Avitar and Vader Sentiment Scores</h2>
+<p>The August 12, 2020 <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-08-11">TidyTuesday</a> dataset presents a perfect opportunity to try out the {vader} package which can be used for native language processing.</p>
+<p>My goal was to analyze character sentiment by breaking down each character’s lines and running them through vader. Here are a few questions that I hoped to answer along the way:</p>
+<ol type="1">
+<li><p>Who are the most positive characters?</p></li>
+<li><p>Who are the most negative characters?</p></li>
+<li><p>Does character sentiment change over the duration of the series?</p></li>
+</ol>
+<p>I also wanted to explore a few new concepts such as the unique piping operators in {magrittr}, {tvthemes}, fonts, customizing themes, and improving my plot annotations. And while I wanted to make a word cloud in the shape of Appa - that’s going to have to wait until next time.</p>
+</section>
+<section id="initial-libraries-and-load-data" class="level2">
+<h2 class="anchored" data-anchor-id="initial-libraries-and-load-data">Initial libraries and load data</h2>
+<p>The first set of libraries to load are as follows. I do load a few font and theme libraries later. But, if you want to use vader this will get you started.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR) <span class="co"># to get data quickly</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># no matter how dark, there is always hope</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr) <span class="co"># for some more unique piping options</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sentimentr) <span class="co"># for getting sentences</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vader) <span class="co"># for vader sentiment scores</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As always, TidyTuesday makes it easy to get the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2020-08-11'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>--- Compiling #TidyTuesday Information for 2020-08-11 ----</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>--- There are 2 files available ---</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>--- Starting Download ---</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Downloading file 1 of 2: `avatar.csv`
+    Downloading file 2 of 2: `scene_description.csv`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>--- Download complete ---</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>avatar <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>avatar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a quick look at what is included in this dataset. It’s the script to each episode, including the writer, director, and IMDB episode - however, we’re going to focus on <em>what</em> the characters are speaking.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>             <span class="sc">~</span>variable,      <span class="sc">~</span>class,                                    <span class="sc">~</span>description,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"id"</span>,   <span class="st">"integer"</span>,                         <span class="st">"Unique Row identifier"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"book"</span>, <span class="st">"character"</span>,                                     <span class="st">"Book name"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"book_num"</span>,   <span class="st">"integer"</span>,                                   <span class="st">"Book number"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"chapter"</span>, <span class="st">"character"</span>,                                  <span class="st">"Chapter name"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"chapter_num"</span>,   <span class="st">"integer"</span>,                                  <span class="st">"Chapter Name"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>           <span class="st">"character"</span>, <span class="st">"character"</span>,                            <span class="st">"Character speaking"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">"full_text"</span>, <span class="st">"character"</span>, <span class="st">"Full text (scene description, character text)"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>     <span class="st">"character_words"</span>, <span class="st">"character"</span>,                   <span class="st">"Text coming from characters"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>              <span class="st">"writer"</span>, <span class="st">"character"</span>,                                <span class="st">"Writer of book"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"director"</span>, <span class="st">"character"</span>,                           <span class="st">"Director of episode"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"imdb_rating"</span>,    <span class="st">"double"</span>,                       <span class="st">"IMDB rating for episode"</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 13%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable</th>
+<th style="text-align: left;">class</th>
+<th style="text-align: left;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Unique Row identifier</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">book</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Book name</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">book_num</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Book number</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">chapter</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Chapter name</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">chapter_num</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Chapter Name</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Character speaking</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">full_text</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Full text (scene description, character text)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character_words</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Text coming from characters</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">writer</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Writer of book</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">director</td>
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">Director of episode</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">imdb_rating</td>
+<td style="text-align: left;">double</td>
+<td style="text-align: left;">IMDB rating for episode</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="who-speaks-the-most-often" class="level2">
+<h2 class="anchored" data-anchor-id="who-speaks-the-most-often">Who speaks the most often?</h2>
+<p>First, I ran a quick line of code to see who talked the most often and if I need to clean it up a bit. Looks like I'm going to have to remove the "Scene Description". Additionally, I plan on picking a subset of the characters to plot later and I want to see who speaks enough to be included.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>avatar <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(character) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>())<span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">20</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">character</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Scene Description</td>
+<td style="text-align: right;">3393</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aang</td>
+<td style="text-align: right;">1796</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: right;">1639</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Katara</td>
+<td style="text-align: right;">1437</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Zuko</td>
+<td style="text-align: right;">776</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Toph</td>
+<td style="text-align: right;">507</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Iroh</td>
+<td style="text-align: right;">337</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Azula</td>
+<td style="text-align: right;">211</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Jet</td>
+<td style="text-align: right;">134</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Suki</td>
+<td style="text-align: right;">114</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Zhao</td>
+<td style="text-align: right;">107</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mai</td>
+<td style="text-align: right;">82</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hakoda</td>
+<td style="text-align: right;">77</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Roku</td>
+<td style="text-align: right;">67</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ty Lee</td>
+<td style="text-align: right;">64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ozai</td>
+<td style="text-align: right;">59</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bumi</td>
+<td style="text-align: right;">55</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yue</td>
+<td style="text-align: right;">53</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hama</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Warden</td>
+<td style="text-align: right;">49</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="data-prep" class="level2">
+<h2 class="anchored" data-anchor-id="data-prep">Data Prep</h2>
+<p>Thanks to Avery Robbins for dataset {appa} there isn't much cleaning do be done, I only removed the "Scene Description". Since I'm also trying to get used to using the magrittr %&lt;&gt;% assignment-piping operator, this was a is was a good opportunity to start.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>avatar_clean <span class="ot">&lt;-</span> avatar </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>avatar_clean <span class="sc">%&lt;&gt;%</span> <span class="fu">filter</span>(character <span class="sc">!=</span> <span class="st">"Scene Description"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(id<span class="sc">:</span>character,character_words)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="vader-compound-scores" class="level2">
+<h2 class="anchored" data-anchor-id="vader-compound-scores">VADER compound scores</h2>
+<p>Luke, I am your Father. You can read more about it vader here: <a href="https://cran.r-project.org/web/packages/vader/vader.pdf">PDF</a>. While it is designed for social media, it also aligns pretty well with my priors about the characters.</p>
+<section id="step-1-sentences.-yip-yip" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-sentences.-yip-yip">Step 1: Sentences. Yip yip!</h3>
+<p>I'm going to include my code I used to check my process along the way. Here, I check to make sure get_sentences() is working.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>avatar_clean <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">get_sentences</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 8%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 66%">
+<col style="width: 4%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">book</th>
+<th style="text-align: right;">book_num</th>
+<th style="text-align: left;">chapter</th>
+<th style="text-align: right;">chapter_num</th>
+<th style="text-align: left;">character</th>
+<th style="text-align: left;">character_words</th>
+<th style="text-align: right;">element_id</th>
+<th style="text-align: right;">sentence_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Water.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Earth.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Fire.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Air.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">My grandmother used to tell me stories about the old days: a time of peace when the Avatar kept balance between the Water Tribes, Earth Kingdom, Fire Nation and Air Nomads.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">But that all changed when the Fire Nation attacked.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Only the Avatar mastered all four elements; only he could stop the ruthless firebenders.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">But when the world needed him most, he vanished.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">A hundred years have passed, and the Fire Nation is nearing victory in the war.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Two years ago, my father and the men of my tribe journeyed to the Earth Kingdom to help fight against the Fire Nation, leaving me and my brother to look after our tribe.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Some people believe that the Avatar was never reborn into the Air Nomads and that the cycle is broken, but I haven’t lost hope.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">I still believe that, somehow, the Avatar will return to save the world.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">It’s not getting away from me this time.</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">Watch and learn, Katara.</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">This is how you catch a fish.</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Sokka, look!</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">Sshh!</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">Katara, you’re going to scare it away.</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">Mmmm …</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sokka</td>
+<td style="text-align: left;">I can already smell it cookin’.</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">But, Sokka!</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">I caught one!</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Okay, it works. Run it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>avatar_sentences <span class="ot">&lt;-</span> avatar_clean <span class="sc">%&gt;%</span> <span class="fu">get_sentences</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<p>Step 2: Check structure and test VADER</p>
+<p>Check the structure of avatar_sentences to setup VADER properly</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(avatar_sentences)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 18,440
+Columns: 9
+$ id              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 5, 6, 6, ~
+$ book            &lt;chr&gt; "Water", "Water", "Water", "Water", "Water", "Water", ~
+$ book_num        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+$ chapter         &lt;chr&gt; "The Boy in the Iceberg", "The Boy in the Iceberg", "T~
+$ chapter_num     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+$ character       &lt;chr&gt; "Katara", "Katara", "Katara", "Katara", "Katara", "Kat~
+$ character_words &lt;gt_sntnc&gt; "Water.", "Earth.", "Fire.", "Air.", "My grandmot~
+$ element_id      &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, ~
+$ sentence_id     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 1, 1, ~</code></pre>
+</div>
+</div>
+<p>Now for a trial run of vader_df()… notice we can pull out the the $compound column, I'll use that when I bind the data back into the avatar_sentences dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>avatar_sentences<span class="sc">$</span>character_words <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">vader_df</span>() <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 56%">
+<col style="width: 32%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">text</th>
+<th style="text-align: left;">word_scores</th>
+<th style="text-align: right;">compound</th>
+<th style="text-align: right;">pos</th>
+<th style="text-align: right;">neu</th>
+<th style="text-align: right;">neg</th>
+<th style="text-align: right;">but_count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Water.</td>
+<td style="text-align: left;">{0}</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Earth.</td>
+<td style="text-align: left;">{0}</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fire.</td>
+<td style="text-align: left;">{-1.4}</td>
+<td style="text-align: right;">-0.340</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Air.</td>
+<td style="text-align: left;">{0}</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">My grandmother used to tell me stories about the old days: a time of peace when the Avatar kept balance between the Water Tribes, Earth Kingdom, Fire Nation and Air Nomads.</td>
+<td style="text-align: left;">{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.4, 0, 0, 0, 0}</td>
+<td style="text-align: right;">0.273</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">0.831</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="step-3-cross-fingers-run-vader-make-coffee" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-cross-fingers-run-vader-make-coffee">Step 3: Cross fingers, Run Vader, Make Coffee</h3>
+<p>Running it on all the sentences takes a bit of time. Go make coffee. Check Twitter. Pet the dog.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># Start the clock!</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>vader_comp <span class="ot">&lt;-</span> avatar_sentences<span class="sc">$</span>character_words <span class="sc">%&gt;%</span> <span class="fu">vader_df</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(compound)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in sentiments[i] &lt;- senti_valence(wpe, i, item): number of items to
+replace is not a multiple of replacement length</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># Calc time</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+ 101.12   28.54  154.94 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#note, set "cache=TRUE" and save some time!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Inspect the results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check it visually</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>vader_comp <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>compound) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  compound
+1    0.965
+2    0.944
+3    0.939
+4    0.931
+5    0.927</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>vader_comp <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">-</span>compound) <span class="sc">%&gt;%</span> <span class="fu">tail</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      compound
+18436   -0.916
+18437   -0.926
+18438   -0.927
+18439   -0.947
+18440   -0.951</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Any failures?</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>vader_comp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(compound)) <span class="co"># no NAs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] compound
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>vader_comp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.nan</span>(compound)) <span class="co"># no NaNs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] compound
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check dims before binding</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vader_comp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18440     1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(avatar_sentences)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18440     9</code></pre>
+</div>
+</div>
+</section>
+<section id="step-4-bind" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-bind">Step 4: Bind</h3>
+<p>Time to add the compound vader score back into our dataset and look at the top 10 instances (again). I could have done this code much more condensed; but, I kept it separated so you follow the process.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>avatar_sentences <span class="sc">%&lt;&gt;%</span> <span class="fu">cbind</span>(vader_comp)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>avatar_sentences <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 8%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 64%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">book</th>
+<th style="text-align: right;">book_num</th>
+<th style="text-align: left;">chapter</th>
+<th style="text-align: right;">chapter_num</th>
+<th style="text-align: left;">character</th>
+<th style="text-align: left;">character_words</th>
+<th style="text-align: right;">element_id</th>
+<th style="text-align: right;">sentence_id</th>
+<th style="text-align: right;">compound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Water.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Earth.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Fire.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">-0.340</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">Air.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Water</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">The Boy in the Iceberg</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Katara</td>
+<td style="text-align: left;">My grandmother used to tell me stories about the old days: a time of peace when the Avatar kept balance between the Water Tribes, Earth Kingdom, Fire Nation and Air Nomads.</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.273</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Looks good!</p>
+</section>
+</section>
+<section id="plot-prep" class="level2">
+<h2 class="anchored" data-anchor-id="plot-prep">Plot Prep</h2>
+<p>As I prepare to make some plots there are few things I’d like to have available:</p>
+<ol type="1">
+<li><p>An “episode” number so I can sort and chart books 1-3 because chapter numbers are repeated within each book</p></li>
+<li><p>Reordered characters - based on their median vader score so that the plots look nice.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new sequence number for each chapter, because chapter number is repeated within each book</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(avatar_sentences<span class="sc">$</span>chapter_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add episode_num</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>avatar_sentences <span class="sc">%&lt;&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">episode_num =</span> <span class="fu">case_when</span>(</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>          book_num <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> chapter_num,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>          book_num <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> chapter_num <span class="sc">+</span> <span class="dv">21</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>          book_num <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> chapter_num <span class="sc">+</span> <span class="dv">42</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>     ))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co"># add in character vader compound median to sort</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>avatar_sentences <span class="sc">%&lt;&gt;%</span> </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">group_by</span>(character) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">char_vader_mean =</span> <span class="fu">median</span>(compound[compound <span class="sc">!=</span> <span class="dv">0</span>])) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">character =</span> <span class="fu">fct_reorder</span>(character, <span class="sc">-</span>char_vader_mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1"></h2>
+<p>Fonts and Themes</p>
+<p>I'm very new to themes and fonts, so not everything worked as well as I'd like. I ended up using some fonts from <a href="https://fonts.google.com/">Google Fonts</a> referenced this excellent <a href="https://cedricscherer.netlify.app/2019/05/17/the-evolution-of-a-ggplot-ep.-1/">blog post</a> by Cédric Scherer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tvthemes) <span class="co"># great ggplot themes and color palettes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tvthemes' was built under R version 4.1.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(showtext) <span class="co"># use fonts from google</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'showtext' was built under R version 4.1.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: sysfonts</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'sysfonts' was built under R version 4.1.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: showtextdb</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(extrafont) <span class="co"># use computer fonts</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'extrafont' was built under R version 4.1.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registering fonts with R</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'extrafont'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:showtextdb':
+
+    font_install</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#font_import()</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">import_avatar</span>() <span class="co"># import "Slayer" font, will need to loadfonts() to access</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>You should install these fonts on your system directly. The files are located in [C:/Users/keene/Documents/R/win-library/4.1/tvthemes/fonts/Slayer]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loadfonts</span>(<span class="at">device =</span> <span class="st">"win"</span>) <span class="co"># Load fonts, can take a minute</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># with {showtext}, you can load directly from google fonts</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">font_add_google</span>(<span class="st">"Indie Flower"</span>, <span class="st">"Indie Flower"</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the current search path for fonts</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co">#font_paths() </span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="co"># List available font files in the search path</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="co">#font_files() </span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax: font_add(family = "&lt;family_name&gt;", regular = "/path/to/font/file")</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="co">#font_add("Palatino", "pala.ttf")</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a><span class="co">#font_families()</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="fu">showtext_auto</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ggplot-bending" class="level2">
+<h2 class="anchored" data-anchor-id="ggplot-bending">ggplot “Bending”</h2>
+<p>Code for my primary plot, with comments.</p>
+<p>I should also note that I'm still working on developing my plot scaling abilities for rMarkdown, so this code might output the plots with small text for you if you scale up a too high. I often develop and save the plot (the code below), then load the image into the markdown.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> avatar_sentences <span class="sc">%&gt;%</span> </span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">filter</span>(character <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Aang"</span>,<span class="st">"Sokka"</span>,<span class="st">"Katara"</span>,<span class="st">"Zuko"</span>,<span class="st">"Toph"</span>,<span class="st">"Iroh"</span>,<span class="st">"Azula"</span>,<span class="st">"Jet"</span>,<span class="st">"Suki"</span>,<span class="st">"Mai"</span>,<span class="st">"Ty Lee"</span>)) <span class="sc">%&gt;%</span> <span class="co"># only wanted primary characters</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>     <span class="fu">filter</span>(compound <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="co"># pulled out 0 scores, not sure if this is good process or not, but it helps with the viz and tell the story better.</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> character, <span class="at">y =</span> compound, <span class="at">color =</span> character)) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.6</span>) <span class="sc">+</span> <span class="co"># add line at zero (bc I pull all other lines out in the theme)</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_jitter</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">seed =</span> <span class="dv">2020</span>,<span class="at">width =</span> <span class="fl">0.25</span>), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span> <span class="co"># add a jitter</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>     <span class="co">#geom_boxplot(color = "black",stat = "boxplot",outlier.alpha = 0,fill=NA) + #pulled this out, decided to use the lollipops</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> character, <span class="at">xend =</span> character, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> char_vader_mean), <span class="at">size =</span> <span class="fl">1.0</span>,<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> <span class="co"># line to zero from median</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>     <span class="fu">stat_summary</span>(<span class="at">fun =</span> stats<span class="sc">::</span>median, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> <span class="co"># make a slightly bigger dot</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>     <span class="fu">stat_summary</span>(<span class="at">fun =</span> stats<span class="sc">::</span>median, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="co"># fill it in, I think i could have done this in 1x line with fill/color, but I couldn't figure it out quickly.</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">labs</span>(</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Water. Earth. Fire. Air. Vader."</span>,</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Analyzing The Setiment of Avatar's Primary Characters With Compound VADER Scores"</span>,</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">"Compound Vader Scores"</span>,</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Data {appa} by Avery Robbins </span><span class="sc">\n</span><span class="st">TidyTuesday 2020-08-11</span><span class="sc">\n</span><span class="st">@rbkeeney"</span></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">+</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>     <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">8</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">family =</span> <span class="st">"Indie Flower"</span>, <span class="at">color =</span> <span class="st">"gray20"</span>,<span class="at">lineheight =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">6</span>,</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> <span class="st">"Every circle represents a sentence spoken by the character.</span><span class="sc">\n</span><span class="st">A higher score correlates to positive sentiment, zero is neutral"</span></span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>              ) <span class="sc">+</span></span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>     <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="fl">0.8</span>, <span class="at">family =</span> <span class="st">"Indie Flower"</span>, <span class="at">color =</span> <span class="st">"gray20"</span>, <span class="at">lineheight =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">6</span>,</span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> <span class="st">"Ty Lee and Iroh</span><span class="sc">\n</span><span class="st">were the most</span><span class="sc">\n</span><span class="st">postive characters"</span></span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>              ) <span class="sc">+</span></span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>     <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">family =</span> <span class="st">"Indie Flower"</span>, <span class="at">color =</span> <span class="st">"gray20"</span>,<span class="at">lineheight =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">6</span>,</span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> <span class="st">"All sentences </span><span class="sc">\n</span><span class="st">with a compound </span><span class="sc">\n</span><span class="st">score of 0 have </span><span class="sc">\n</span><span class="st">been removed"</span></span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>              ) <span class="sc">+</span></span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>     <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">11</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.8</span>, <span class="at">family =</span> <span class="st">"Indie Flower"</span>, <span class="at">color =</span> <span class="st">"gray20"</span>,<span class="at">lineheight =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">6</span>,</span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> <span class="st">"Mai was the only</span><span class="sc">\n</span><span class="st">character with a </span><span class="sc">\n</span><span class="st">negataive median </span><span class="sc">\n</span><span class="st">sentiment"</span></span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>              ) <span class="sc">+</span> </span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme_avatar</span>(</span>
+<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">title.font =</span> <span class="st">"Indie Flower"</span>, <span class="co"># wanted to use slayer, but issues getting loaded.</span></span>
+<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">text.font =</span> <span class="st">"Indie Flower"</span>,</span>
+<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">title.size =</span> <span class="dv">36</span>,</span>
+<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle.size =</span> <span class="dv">24</span></span>
+<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">+</span></span>
+<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme</span>(</span>
+<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"none"</span>, <span class="co"># remove legend</span></span>
+<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"grey20"</span>,<span class="at">lineheight =</span> <span class="fl">0.5</span>), <span class="co">#update caption</span></span>
+<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove plot grids</span></span>
+<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(), <span class="co"># remove plot grids</span></span>
+<span id="cb53-43"><a href="#cb53-43" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">fill =</span> <span class="cn">NA</span>), <span class="co"># box the plot. I like it. Fill = NA ~ no fill.</span></span>
+<span id="cb53-44"><a href="#cb53-44" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>),</span>
+<span id="cb53-45"><a href="#cb53-45" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb53-46"><a href="#cb53-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-47"><a href="#cb53-47" aria-hidden="true" tabindex="-1"></a><span class="co"># match arrows to annotations... takes time, go arrow by arrow.</span></span>
+<span id="cb53-48"><a href="#cb53-48" aria-hidden="true" tabindex="-1"></a>p1_arrows <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb53-49"><a href="#cb53-49" aria-hidden="true" tabindex="-1"></a>     <span class="at">x1 =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">8.5</span>,<span class="dv">1</span>,<span class="fl">10.6</span>),</span>
+<span id="cb53-50"><a href="#cb53-50" aria-hidden="true" tabindex="-1"></a>     <span class="at">x2 =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">8.3</span>,<span class="dv">1</span>,<span class="fl">10.9</span>),</span>
+<span id="cb53-51"><a href="#cb53-51" aria-hidden="true" tabindex="-1"></a>     <span class="at">y1 =</span> <span class="fu">c</span>(<span class="fl">0.67</span>, <span class="fl">0.67</span>, <span class="fl">0.9</span>,<span class="sc">-</span>.<span class="dv">25</span>,<span class="sc">-</span>.<span class="dv">65</span>), </span>
+<span id="cb53-52"><a href="#cb53-52" aria-hidden="true" tabindex="-1"></a>     <span class="at">y2 =</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.38</span>, <span class="fl">0.76</span>,<span class="sc">-</span>.<span class="dv">05</span>,<span class="sc">-</span>.<span class="dv">1</span>)</span>
+<span id="cb53-53"><a href="#cb53-53" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb53-54"><a href="#cb53-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-55"><a href="#cb53-55" aria-hidden="true" tabindex="-1"></a><span class="co"># combine into final plot</span></span>
+<span id="cb53-56"><a href="#cb53-56" aria-hidden="true" tabindex="-1"></a>p1_final <span class="ot">&lt;-</span> p1 <span class="sc">+</span> <span class="fu">geom_curve</span>(</span>
+<span id="cb53-57"><a href="#cb53-57" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> p1_arrows, <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> y1, <span class="at">xend =</span> x2, <span class="at">yend =</span> y2),</span>
+<span id="cb53-58"><a href="#cb53-58" aria-hidden="true" tabindex="-1"></a>     <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.07</span>, <span class="st">"inch"</span>)), <span class="at">size =</span> <span class="fl">0.4</span>,</span>
+<span id="cb53-59"><a href="#cb53-59" aria-hidden="true" tabindex="-1"></a>     <span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">curvature =</span> <span class="sc">-</span><span class="fl">0.2</span></span>
+<span id="cb53-60"><a href="#cb53-60" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb53-61"><a href="#cb53-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-62"><a href="#cb53-62" aria-hidden="true" tabindex="-1"></a><span class="co"># To create better pictures for the markdown (1) save it, and (2) then call it in markdown text with: ![alt text here](path-to-image-here)</span></span>
+<span id="cb53-63"><a href="#cb53-63" aria-hidden="true" tabindex="-1"></a><span class="co"># for referecne, this is what roughly outputs on the screen, moving up dpi will shrink the text...</span></span>
+<span id="cb53-64"><a href="#cb53-64" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(p1_final, filename = "figs/Rplot1.png", dpi = 96, type = "cairo", width = 7, height = 5, units = "in")</span></span>
+<span id="cb53-65"><a href="#cb53-65" aria-hidden="true" tabindex="-1"></a><span class="co"># dpi: 72-96 for web... 300-400 for high res stuff</span></span>
+<span id="cb53-66"><a href="#cb53-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-67"><a href="#cb53-67" aria-hidden="true" tabindex="-1"></a><span class="co"># save high res (uncomment)</span></span>
+<span id="cb53-68"><a href="#cb53-68" aria-hidden="true" tabindex="-1"></a><span class="co">#ggsave(p1_final, filename = "figs/Rplot1.png", dpi = 300, type = "cairo", width = 7, height = 5, units = "in")</span></span>
+<span id="cb53-69"><a href="#cb53-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-70"><a href="#cb53-70" aria-hidden="true" tabindex="-1"></a><span class="co"># open high res, for iteration (comment out once done)</span></span>
+<span id="cb53-71"><a href="#cb53-71" aria-hidden="true" tabindex="-1"></a><span class="co"># img_1 &lt;- magick::image_read('figs/Rplot1.png')</span></span>
+<span id="cb53-72"><a href="#cb53-72" aria-hidden="true" tabindex="-1"></a><span class="co"># print(img_1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/avatar_p1.png" class="img-fluid"></p>
+<p>For the second plot, we use facet_wrap() to show how a few characters compound vadar scores over the duration fo the series.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> avatar_sentences <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">filter</span>(character <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Aang"</span>,<span class="st">"Sokka"</span>,<span class="st">"Katara"</span>,<span class="st">"Zuko"</span>,<span class="st">"Toph"</span>,<span class="st">"Iroh"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>     <span class="fu">filter</span>(compound <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>     <span class="co">#filter(book == "Water") %&gt;% </span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> episode_num, <span class="at">y =</span> compound, <span class="at">color =</span> character)) <span class="sc">+</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>     <span class="co">#geom_point(alpha = 0.6) +</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>     <span class="co">#geom_jitter() +</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_smooth</span>(<span class="at">method =</span> loess, <span class="at">se =</span> F, <span class="at">formula =</span> y <span class="sc">~</span> x) <span class="sc">+</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>     <span class="fu">facet_wrap</span>(<span class="sc">~</span> character) <span class="sc">+</span> </span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>     <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>)) <span class="sc">+</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">labs</span>(</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Water. Earth. Fire. Air. Vader."</span>,</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Analyzing The Change in Setiment Avatar's Primary Characters With Compound VADER Scores Over The Duration Of The Series"</span>,</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">"Compound VADER Scores"</span>,</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Nth Episode"</span>,</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Data {appa} by Avery Robbins </span><span class="sc">\n</span><span class="st">TidyTuesday 2020-08-11</span><span class="sc">\n</span><span class="st">@rbkeeney"</span></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">+</span></span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme_avatar</span>(</span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">title.font =</span> <span class="st">"Indie Flower"</span>,</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">title.size =</span> <span class="dv">36</span>,</span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">text.font =</span> <span class="st">"Indie Flower"</span>,</span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle.size =</span> <span class="dv">24</span>,</span>
+<span id="cb54-23"><a href="#cb54-23" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">+</span></span>
+<span id="cb54-24"><a href="#cb54-24" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme</span>(</span>
+<span id="cb54-25"><a href="#cb54-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">28</span>, <span class="at">lineheight =</span> <span class="fl">0.5</span>),</span>
+<span id="cb54-26"><a href="#cb54-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb54-27"><a href="#cb54-27" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb54-28"><a href="#cb54-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb54-29"><a href="#cb54-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey20"</span>, <span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb54-30"><a href="#cb54-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb54-31"><a href="#cb54-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb54-32"><a href="#cb54-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb54-33"><a href="#cb54-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>)</span>
+<span id="cb54-34"><a href="#cb54-34" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb54-35"><a href="#cb54-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-36"><a href="#cb54-36" aria-hidden="true" tabindex="-1"></a><span class="co"># uncomment to save</span></span>
+<span id="cb54-37"><a href="#cb54-37" aria-hidden="true" tabindex="-1"></a><span class="co">#ggsave(p2, filename = "figs/Rplot2.png", dpi = 300, type = "cairo", width = 7, height = 5, units = "in") </span></span>
+<span id="cb54-38"><a href="#cb54-38" aria-hidden="true" tabindex="-1"></a><span class="co"># open high res, for iteration (comment out once done)</span></span>
+<span id="cb54-39"><a href="#cb54-39" aria-hidden="true" tabindex="-1"></a><span class="co">#img_2 &lt;- magick::image_read('figs/Rplot2.png')</span></span>
+<span id="cb54-40"><a href="#cb54-40" aria-hidden="true" tabindex="-1"></a><span class="co">#print(img_2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/avatar_p2.png" class="img-fluid"></p>
+<p>That wraps it up! Cheers, Ryan</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

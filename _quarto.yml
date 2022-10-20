@@ -4,11 +4,19 @@ project:
 
 website:
   title: "Ryan Keeney"
-  navbar:
-    left:
+  sidebar:
+    style: "docked"
+    search: true
+    contents: 
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: About
+      - section: "NLP"
+        contents: 
+        - href: posts/avatar_vader.qmd
+          text: VADAR Sentiment Scores
+      - section: "Unsupervised Learning"
+      - section: "Supervised Learning"
+      - section: "Data Visualization"
 
 format:
   html:
