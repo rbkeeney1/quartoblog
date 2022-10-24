@@ -22,6 +22,10 @@ website:
           text: ISOMAP vs PCA
       - section: "Supervised Learning"
       - section: "Data Visualization"
+      - section: "Applied Stats and EDA"
+        contents: 
+        - href: posts/anova_introduction.qmd
+          text: ANOVA I
 
 format:
   html:
@@ -30,6 +34,3 @@ format:
       dark: darkly
     css: styles.css
     toc: true
-
-
-

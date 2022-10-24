@@ -4,5 +4,17 @@
   },
   "index.qmd": {
     "index.html": "36bafa7c"
+  },
+  "posts/anova_introduction.qmd": {
+    "anova_introduction.html": "3aa978b2"
+  },
+  "posts/avatar_vader.qmd": {
+    "avatar_vader.html": "9d951dc7"
+  },
+  "posts/ISOMAP_faces.ipynb": {
+    "ISOMAP_faces.html": "8a635f8d"
+  },
+  "posts/PCA_eu_food.ipynb": {
+    "PCA_eu_food.html": "346ca73b"
   }
 }
