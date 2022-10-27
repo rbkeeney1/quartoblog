@@ -1,0 +1,81 @@
+---
+title: "Resources and Links"
+image: headshot.png
+
+about:
+  template: solana
+  image-width: 15em
+  links:
+    - text: LinkedIn
+      href: https://www.linkedin.com/in/ryan-brent-keeney/
+    - text: Twitter
+      href: https://twitter.com/rbkeeney
+    - text: GitHub
+      href: https://github.com/rbkeeney1
+    - text: Email
+      href: mailto:keeney.ryan@gmail.com
+---
+
+::: {#hero-heading}
+If you would like to make a suggestion, please contact me through one of the links above.
+:::
+
+## Data Science Resources
+
+[An Introduction to Statistical Learning](https://www.statlearning.com/)
+
+[The Elements of Statistical Learning](https://hastie.su.domains/Papers/ESLII.pdf)
+
+[Foundations of Machine Learning](https://cs.nyu.edu/~mohri/mlbook/)
+
+## R Resources
+
+[R cookbook](http://www.cookbook-r.com/)
+
+[R for Data Science](https://r4ds.had.co.nz/)
+
+[Mastering Shiny](https://mastering-shiny.org/index.html)
+
+## Python Resources
+
+[A Whirlwind Tour of Python, by Jake VanderPlas](https://jakevdp.github.io/WhirlwindTourOfPython/) A solid introduction to Python, assuming you are already familiar with another programming language.
+
+[Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/)
+
+[Pythex \| In-browser regex tester](https://pythex.org/)
+
+## Data Visualization Resources
+
+[From Data to Viz](https://www.data-to-viz.com/). A fantastic guide to all types of plots by Yan Holtz and Conor Healy. Also check out their [Dataviz Inspiration](https://www.dataviz-inspiration.com/) page.
+
+[BBC Visual and Data Journalism cookbook for R graphics](https://bbc.github.io/rcookbook/#how_to_create_bbc_style_graphics)
+
+[Cedric Scherer's Data Visualization & Information Design](https://cedricscherer.netlify.app/top/dataviz/)
+
+## Data Engineering Resources
+
+[The Ultimate Guide to Deploying a Shiny App on AWS, by Charles Bordet](https://www.charlesbordet.com/en/guide-shiny-aws/#). I personally used the guide to launch my own EC2 servers.
+
+[Oh Shit, Git!?!](https://ohshitgit.com/) You've messed up. Bad. This resource might just save you.
+
+[Intro to SQL: Querying and managing data](https://www.khanacademy.org/computing/computer-programming/sql)
+
+## Math Resources
+
+[Engineering Biostatistics: An Introduction Using MATLAB and WinBUGS by Brani Vidakovic](https://statbook.gatech.edu/statb4.pdf). Excellent resources for Bayesian statistics, MATLAB and WinBugs.
+
+[Wolframe\|Alpha](https://www.wolframalpha.com/). Powerful in-browser computational aid.
+
+[Symbolab](https://www.symbolab.com/). Another powerful in-browser computational aid. Usually provides steps to solve problems at no extra cost.
+
+[Octave](https://octave-online.net/). Open source software to run those pesky .m scripts (Free alternative to MatLab)
+
+[OpenBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/openbugs/). Free Bayesian software. I prefer to use R or Python.
+
+[Calculus Made Easy by S. P. Thompson](https://calculusmadeeasy.org/)
+
+[Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf)
+
+[The Matrix Cookbook](The Matrix Cookbook)
+
+[Introduction to Applied Linear Algebra](https://web.stanford.edu/~boyd/vmls/vmls.pdf)

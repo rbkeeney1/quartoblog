@@ -10,6 +10,8 @@ website:
     contents: 
       - href: index.qmd
         text: About
+      - href: helpful_links.qmd
+        text: Resources and Links
       - section: "NLP"
         contents: 
         - href: posts/avatar_vader.qmd
