@@ -1,6 +1,6 @@
 ---
 title: "Resources and Links"
-image: headshot.png
+#image: headshot.png
 
 about:
   template: solana
@@ -35,6 +35,8 @@ If you would like to make a suggestion, please contact me through one of the lin
 [R for Data Science](https://r4ds.had.co.nz/)
 
 [Mastering Shiny](https://mastering-shiny.org/index.html)
+
+[Tidy Modeling with R](https://www.tmwr.org/). My absolute favorite way to develop models.
 
 ## Python Resources
 
@@ -76,6 +78,6 @@ If you would like to make a suggestion, please contact me through one of the lin
 
 [Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf)
 
-[The Matrix Cookbook](The Matrix Cookbook)
+[The Matrix Cookbook](The%20Matrix%20Cookbook)
 
 [Introduction to Applied Linear Algebra](https://web.stanford.edu/~boyd/vmls/vmls.pdf)

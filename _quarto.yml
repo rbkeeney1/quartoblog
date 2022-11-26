@@ -4,12 +4,25 @@ project:
 
 website:
   title: "Ryan Keeney"
+
   sidebar:
+    title: Ryan Keeney
+    logo: headshot.png
     style: "docked"
     search: true
+    border: true
+    alignment: "left"
+    tools:
+      - icon: twitter
+        href: https://twitter.com/rbkeeney
+      - icon: linkedin
+        href: https://www.linkedin.com/in/ryan-brent-keeney/
+      - icon: envelope
+        href: mailto:keeney.ryan@gmail.com
     contents: 
       - href: index.qmd
-        text: About
+        text: About Ryan
+        icon: person
       - href: helpful_links.qmd
         text: Resources and Links
       - section: "NLP"
@@ -19,20 +32,30 @@ website:
       - section: "Unsupervised Learning"
         contents: 
         - href: posts/PCA_eu_food.ipynb
-          text: PCA | EU Food
+          text: PCA with EU Foods
         - href: posts/ISOMAP_faces.ipynb
           text: ISOMAP vs PCA
-      - section: "Supervised Learning"
-      - section: "Data Visualization"
+      #- section: "Supervised Learning"
+      #- section: "Data Visualization"
       - section: "Applied Stats and EDA"
         contents: 
         - href: posts/anova_introduction.qmd
-          text: ANOVA I
+          text: ANOVA 101
+          
+  page-footer: 
+    left: "Copyright 2023, Ryan Keeney" 
+    right: 
+      - icon: twitter
+        href: https://twitter.com/rbkeeney
+      - icon: linkedin
+        href: https://www.linkedin.com/in/ryan-brent-keeney/
+      - icon: envelope
+        href: mailto:keeney.ryan@gmail.com
 
 format:
   html:
     theme:
-      light: flatly
-      dark: darkly
+      light: lumen
+      #dark: darkly
     css: styles.css
     toc: true

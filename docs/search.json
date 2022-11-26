@@ -18,7 +18,7 @@
     "href": "helpful_links.html#r-resources",
     "title": "Resources and Links",
     "section": "R Resources",
-    "text": "R Resources\nR cookbook\nR for Data Science\nMastering Shiny"
+    "text": "R Resources\nR cookbook\nR for Data Science\nMastering Shiny\nTidy Modeling with R. My absolute favorite way to develop models."
   },
   {
     "objectID": "helpful_links.html#python-resources",
@@ -42,18 +42,18 @@
     "text": "Data Engineering Resources\nThe Ultimate Guide to Deploying a Shiny App on AWS, by Charles Bordet. I personally used the guide to launch my own EC2 servers.\nOh Shit, Git!?! You’ve messed up. Bad. This resource might just save you.\nIntro to SQL: Querying and managing data"
   },
   {
-    "objectID": "helpful_links.html#math-tools",
-    "href": "helpful_links.html#math-tools",
+    "objectID": "helpful_links.html#math-resources",
+    "href": "helpful_links.html#math-resources",
     "title": "Resources and Links",
-    "section": "Math Tools",
-    "text": "Math Tools\nEngineering Biostatistics: An Introduction Using MATLAB and WinBUGS by Brani Vidakovic. Excellent resources for Bayesian statistics, MATLAB and WinBugs.\nWolframe|Alpha. Powerful in-browser computational aid.\nSymbolab. Another powerful in-browser computational aid. Usually provides steps to solve problems at no extra cost.\nOctave. Open source software to run those pesky .m scripts (Free alternative to MatLab)\nOpenBUGS. Free Bayesian software. I prefer to use R or Python.\nCalculus Made Easy by S. P. Thompson\nMathematics for Machine Learning\nThe Matrix Cookbook\nIntroduction to Applied Linear Algebra"
+    "section": "Math Resources",
+    "text": "Math Resources\nEngineering Biostatistics: An Introduction Using MATLAB and WinBUGS by Brani Vidakovic. Excellent resources for Bayesian statistics, MATLAB and WinBugs.\nWolframe|Alpha. Powerful in-browser computational aid.\nSymbolab. Another powerful in-browser computational aid. Usually provides steps to solve problems at no extra cost.\nOctave. Open source software to run those pesky .m scripts (Free alternative to MatLab)\nOpenBUGS. Free Bayesian software. I prefer to use R or Python.\nCalculus Made Easy by S. P. Thompson\nMathematics for Machine Learning\nThe Matrix Cookbook\nIntroduction to Applied Linear Algebra"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Ryan Keeney",
     "section": "",
-    "text": "Ryan Keeney is a data science graduate from Georgia Tech with experience in R, Python, and SQL. When not innovating on data platforms, Ryan enjoys spending time traveling, teaching, volunteering, and spending quality time with family and friends.\n\n\nGeorgia Institute of Technology | Atlanta, GA\nMaster of Science in Analytics | January 2021 - December 2022\nUniversity of Michigan | Ann Arbor, MI\nBSE in Mechanical Engineering | Sept 2009 - April 2014\n\n\n\nJohn Deere | Design Engineer, Product Marketing Manager | May 2014 - June 2020\nAmerican School of Asuncion | Math and Science Teacher | Sept 2012 - April 2018\nFF Astronauts | Director of Data Analytics | June 2020 - Present\nAdditional Experience | Chrysler FIAT, Toyota, Commnet, Gates Corporation"
+    "text": "LinkedIn\n  \n  \n     Twitter\n  \n  \n     GitHub\n  \n  \n     Email\n  \n\n      \nRyan Keeney (he/él) is a data scientist who enjoys helping others investigate, analyze, and build solutions for critical business decisions. He holds a graduate degree in data analytics Georgia Tech and a bachelor’s degree in mechanical engineering from the University of Michigan, Ann Arbor. When he’s not pursuing a data science project, Ryan enjoys teaching, volunteering, and traveling with his family. He is an proud ally and has been involved in projects furthering equality and access to education, healthcare, and human rights in the United States and internationally since 2013."
   },
   {
     "objectID": "posts/anova_introduction.html",
@@ -322,10 +322,24 @@
     "text": "Check correlations to dim1 and dim2\nDimension 1 (PC 1) is highly correlated to food consumption areas like Germany, although it also has mild to strong correlations to many of the countries – indicating that this is indeed the dimension upon variation is maximized. Dimension 2 is most highly correlated to Sweden (positive) and Spain (negative).\n\n# add dim1 and dim2\nfood_consumption['dim1'] = dim1.tolist()\nfood_consumption['dim2'] = dim2.tolist()\ndisplay(food_consumption.drop(columns=['Food Item']).corr(method='pearson').tail(2).style.format('{0:,.2f}'))\n\n\n                    Germany        Italy        France        Holland        Belgium        Luxembourg        England        Portugal        Austria        Switzerland        Sweden        Denmark        Norway        Finland        Spain        Ireland        dim1        dim2    \n                \n                        dim1\n                        0.95\n                        0.80\n                        0.80\n                        0.70\n                        0.90\n                        0.86\n                        0.60\n                        0.73\n                        0.89\n                        0.82\n                        0.49\n                        0.82\n                        0.84\n                        0.80\n                        0.73\n                        0.70\n                        1.00\n                        0.00\n            \n            \n                        dim2\n                        0.13\n                        -0.42\n                        -0.32\n                        0.33\n                        -0.07\n                        -0.33\n                        0.40\n                        -0.49\n                        -0.13\n                        -0.24\n                        0.56\n                        0.43\n                        0.38\n                        0.35\n                        -0.60\n                        0.31\n                        0.00\n                        1.00"
   },
   {
-    "objectID": "helpful_links.html#math-resources",
-    "href": "helpful_links.html#math-resources",
-    "title": "Resources and Links",
-    "section": "Math Resources",
-    "text": "Math Resources\nEngineering Biostatistics: An Introduction Using MATLAB and WinBUGS by Brani Vidakovic. Excellent resources for Bayesian statistics, MATLAB and WinBugs.\nWolframe|Alpha. Powerful in-browser computational aid.\nSymbolab. Another powerful in-browser computational aid. Usually provides steps to solve problems at no extra cost.\nOctave. Open source software to run those pesky .m scripts (Free alternative to MatLab)\nOpenBUGS. Free Bayesian software. I prefer to use R or Python.\nCalculus Made Easy by S. P. Thompson\nMathematics for Machine Learning\nThe Matrix Cookbook\nIntroduction to Applied Linear Algebra"
+    "objectID": "index.html#education",
+    "href": "index.html#education",
+    "title": "Ryan Keeney",
+    "section": "Education",
+    "text": "Education\nGeorgia Institute of Technology | Atlanta, GA\nMaster of Science in Analytics | January 2021 - December 2022 | Example Projects\nUniversity of Michigan | Ann Arbor, MI\nBSE in Mechanical Engineering | Sept 2009 - April 2014"
+  },
+  {
+    "objectID": "index.html#experience",
+    "href": "index.html#experience",
+    "title": "Ryan Keeney",
+    "section": "Experience",
+    "text": "Experience\nFF Astronauts | Director of Data Analytics | June 2020 - Present\nAmerican School of Asuncion | Math and Science Teacher | Sept 2012 - April 2018\nJohn Deere | Design Engineer, Product Marketing Manager | May 2014 - June 2020\nAdditional Experience | Chrysler FIAT, Toyota, Commnet, Gates Corporation"
+  },
+  {
+    "objectID": "index.html#skills-languages-and-awards",
+    "href": "index.html#skills-languages-and-awards",
+    "title": "Ryan Keeney",
+    "section": "Skills, Languages, and Awards",
+    "text": "Skills, Languages, and Awards\nInterested in hiring Ryan? He’s open to new opportunities through email or connecting on LinkedIn.\nRyan has experience with various supervised, unsupervised, and reinforcement learning techniques and as applied various statistical and machine learning techniques to supervised, unsupervised, and reinforcement learning tasks. He also has experience in simulation, Bayesian statistics, and presenting to C-level stakeholders.\n\n\n\n\n\n\n\nSupervised Learning\nUnsupervised Learning\n\n\n\n\nLinear regression, multiple-linear regression, logistic regression, LASSO, ridge regression, elastic net, decision trees, random forest, SVM, KNN, neural nets, boosted gradient trees, kernel-based methods, time-series analysis, anomaly detection, forecasting, deep learning for image and NLP applications.\nK-Means, hierarchical clustering, spectral clustering, network graph analysis, ISOMAP, PCA, density estimation.\n\n\n\nTools: Advanced in R (Tidyverse, Tidymodels, Shiny, ggplot), Python (NumPy, Pandas, SciPy, SciKit-learn, PySpark) | Proficient in multiple SQL languages, AWS EC2 Computing, BUGS, ARENA | Experience in HTML/CSS, MATLAB, Spark, Tableau, Azure, Databricks, D3\nLanguages: Fluent in English, Conversational Proficiency in Spanish\nAwards: John Deere Innovation Award (2019), Serving our Communities (2016), Mike Schmidt Memorial Baja SAE (2013)"
   }
 ]

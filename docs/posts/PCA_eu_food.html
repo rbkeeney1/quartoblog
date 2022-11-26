@@ -132,7 +132,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar floating fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -148,11 +148,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../" class="sidebar-logo-link">
+      <img src="../headshot.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Ryan Keeney</a> 
-        <div class="sidebar-tools-main">
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://twitter.com/rbkeeney" title="" class="sidebar-tool px-1"><i class="bi bi-twitter"></i></a>
+    <a href="https://www.linkedin.com/in/ryan-brent-keeney/" title="" class="sidebar-tool px-1"><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:keeney.ryan@gmail.com" title="" class="sidebar-tool px-1"><i class="bi bi-envelope"></i></a>
   <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
@@ -166,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">About</a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">About Ryan</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -210,19 +216,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">Supervised Learning</span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">Data Visualization</span>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Applied Stats and EDA</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Applied Stats and EDA</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../posts/anova_introduction.html" class="sidebar-item-text sidebar-link">ANOVA I</a>
@@ -234,30 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
 </nav>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#dimensionality-reduction-and-pca" id="toc-dimensionality-reduction-and-pca" class="nav-link active" data-scroll-target="#dimensionality-reduction-and-pca">Dimensionality reduction and PCA</a></li>
-  <li><a href="#pca-by-hand" id="toc-pca-by-hand" class="nav-link" data-scroll-target="#pca-by-hand">PCA, by hand</a></li>
-  <li><a href="#food-consumption-in-european-countries" id="toc-food-consumption-in-european-countries" class="nav-link" data-scroll-target="#food-consumption-in-european-countries">Food consumption in European countries</a></li>
-  <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries">Libraries</a></li>
-  <li><a href="#load-and-prep-data" id="toc-load-and-prep-data" class="nav-link" data-scroll-target="#load-and-prep-data">Load and Prep Data</a></li>
-  <li><a href="#normalize-data" id="toc-normalize-data" class="nav-link" data-scroll-target="#normalize-data">Normalize data</a></li>
-  <li><a href="#pca" id="toc-pca" class="nav-link" data-scroll-target="#pca">PCA</a></li>
-  <li><a href="#plot-1" id="toc-plot-1" class="nav-link" data-scroll-target="#plot-1">Plot 1</a></li>
-  <li><a href="#check-correlations-to-dim1-and-dim2" id="toc-check-correlations-to-dim1-and-dim2" class="nav-link" data-scroll-target="#check-correlations-to-dim1-and-dim2">Check correlations to dim1 and dim2</a></li>
-  <li><a href="#flipping-the-analysis" id="toc-flipping-the-analysis" class="nav-link" data-scroll-target="#flipping-the-analysis">Flipping the Analysis</a></li>
-  <li><a href="#libraries-1" id="toc-libraries-1" class="nav-link" data-scroll-target="#libraries-1">Libraries</a></li>
-  <li><a href="#load-and-prep-data-1" id="toc-load-and-prep-data-1" class="nav-link" data-scroll-target="#load-and-prep-data-1">Load and Prep Data</a></li>
-  <li><a href="#normalize-data-1" id="toc-normalize-data-1" class="nav-link" data-scroll-target="#normalize-data-1">Normalize data</a></li>
-  <li><a href="#pca-1" id="toc-pca-1" class="nav-link" data-scroll-target="#pca-1">PCA</a></li>
-  <li><a href="#plot-2-common-and-uncommon-pairings" id="toc-plot-2-common-and-uncommon-pairings" class="nav-link" data-scroll-target="#plot-2-common-and-uncommon-pairings">Plot 2: Common (and uncommon) pairings</a></li>
-  <li><a href="#check-correlations-to-dim1-and-dim2-1" id="toc-check-correlations-to-dim1-and-dim2-1" class="nav-link" data-scroll-target="#check-correlations-to-dim1-and-dim2-1">Check correlations to dim1 and dim2</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -1658,6 +1635,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2023, Ryan Keeney</div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link active" href="https://twitter.com/rbkeeney" aria-current="page">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/ryan-brent-keeney/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:keeney.ryan@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 
