@@ -1,5 +1,5 @@
 ---
-title: "Resources and Links"
+title: "Helpful Resources and Links"
 #image: headshot.png
 
 about:
@@ -17,7 +17,7 @@ about:
 ---
 
 ::: {#hero-heading}
-If you would like to make a suggestion, please contact me through one of the links above.
+They are Ryan's favorite bookmarks, they cover everything from programming introductions to deep learning. If you have have a suggestion, please contact Ryan at one of the above links.
 :::
 
 ## Data Science Resources

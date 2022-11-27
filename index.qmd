@@ -35,24 +35,28 @@ BSE in Mechanical Engineering \| Sept 2009 - April 2014
 
 **FF Astronauts** \| Director of Data Analytics \| June 2020 - Present
 
-**American School of Asuncion** \| Math and Science Teacher \| Sept 2012 - April 2018
+**American School of Asuncion** \| Math and Science Teacher \| July 2021 - June 2022
 
 **John Deere** \| Design Engineer, Product Marketing Manager \| May 2014 - June 2020
 
 **Additional Experience** \| Chrysler FIAT, Toyota, Commnet, Gates Corporation
 
-## Skills, Languages, and Awards
+## Skills and Tools
 
-**Interested in hiring Ryan?** He's open to new opportunities through [email](mailto:keeney.ryan@gmail.com "keeney.ryan@gmail.com") or [connecting on LinkedIn](https://www.linkedin.com/in/ryan-brent-keeney/ "linkedin").
+**Interested in working with Ryan?** Connect with Ryan through [email](mailto:keeney.ryan@gmail.com "keeney.ryan@gmail.com") or [LinkedIn](https://www.linkedin.com/in/ryan-brent-keeney/ "linkedin").
 
 Ryan has experience with various supervised, unsupervised, and reinforcement learning techniques and as applied various statistical and machine learning techniques to supervised, unsupervised, and reinforcement learning tasks. He also has experience in simulation, Bayesian statistics, and presenting to C-level stakeholders.
 
 | Supervised Learning                                                                                                                                                                                                                                                                                               | Unsupervised Learning                                                                                           |
-|---------------------------------------------------|---------------------|
+|--------------------------------------------------|----------------------|
 | Linear regression, multiple-linear regression, logistic regression, LASSO, ridge regression, elastic net, decision trees, random forest, SVM, KNN, neural nets, boosted gradient trees, kernel-based methods, time-series analysis, anomaly detection, forecasting, deep learning for image and NLP applications. | K-Means, hierarchical clustering, spectral clustering, network graph analysis, ISOMAP, PCA, density estimation. |
 
 **Tools:** Advanced in R (Tidyverse, Tidymodels, Shiny, ggplot), Python (NumPy, Pandas, SciPy, SciKit-learn, PySpark) \| Proficient in multiple SQL languages, AWS EC2 Computing, BUGS, ARENA \| Experience in HTML/CSS, MATLAB, Spark, Tableau, Azure, Databricks, D3
 
-**Languages:** Fluent in English, Conversational Proficiency in Spanish
+## Languages
 
-**Awards:** John Deere Innovation Award (2019), Serving our Communities (2016), Mike Schmidt Memorial Baja SAE (2013)
+Fluent in English, Conversational Proficiency in Spanish
+
+## Awards
+
+John Deere Innovation Award (2019), Serving our Communities (2016), Mike Schmidt Memorial Baja SAE (2013)
