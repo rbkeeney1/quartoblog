@@ -18,7 +18,7 @@ about:
 ---
 
 ::: {#hero-heading}
-They are Ryan's favorite bookmarks, they cover everything from programming introductions to deep learning. If you have have a suggestion, please contact Ryan at one of the above links.
+These are Ryan's favorite bookmarks. They cover everything from programming 101 to deep learning. If you have have a suggestion, please contact Ryan.
 :::
 
 ## Data Science Resources
