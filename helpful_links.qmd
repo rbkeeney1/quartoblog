@@ -3,6 +3,7 @@ title: "Helpful Resources and Links"
 #image: headshot.png
 
 about:
+  id: hero-heading
   template: solana
   image-width: 15em
   links:
