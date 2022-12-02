@@ -28,7 +28,7 @@ website:
       - section: "Data Prep"
         contents: 
         - href: posts/tidymodels_recipes.qmd
-          text: Prepocessing data in R
+          text: Preprocessing data in R
       #- section: "Data Visualization"
         #contents:
       - section: "Supervised Learning"
