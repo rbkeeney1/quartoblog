@@ -19,5 +19,8 @@
   },
   "helpful_links.qmd": {
     "helpful_links.html": "e7028e5d"
+  },
+  "posts/tidymodels_recipes.qmd": {
+    "tidymodels_recipes.html": "9b158899"
   }
 }

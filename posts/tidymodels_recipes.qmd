@@ -1,0 +1,502 @@
+---
+title: "Prepocessing data in R"
+author: "Ryan Keeney"
+editor: visual
+execute:
+  freeze: auto
+---
+
+# Introduction
+
+Cleaning and preprocessing data is an essential skill for data scientists. Luckily, [tidymodels](https://www.tidymodels.org/) makes it easy and has become my go-to process for building robust and sustainable workflows.
+
+My favorite advantage using this approach is that I can directly tie my preprocessing steps into my model. No more building and rebuilding preprocessing and modeling steps if you decide to change something on either end.
+
+Learn more: <https://www.tidymodels.org/start/recipes/>
+
+# Libraries and Example Data
+
+Load the tidymodels package and the mtcars data.
+
+```{r}
+#| warning: false
+
+# libraries
+library(tidymodels, quietly = TRUE, warn.conflicts = FALSE)
+
+# load data, covert row name to column
+data <- mtcars |> rownames_to_column(var = 'vehicle')
+knitr::kable(data |> sample_n(3))
+```
+
+# Splitting Data
+
+If you take one thing away from this post, it'll likely be the these three functions. Splitting data (with built in methods for controlling breaks and strata) is simple with tidymodels.
+
+```{r}
+# Set seed for replication
+set.seed(1212022)
+
+# Put 3/4 of the data into the training set 
+data_split <- initial_split(data, prop = 3/4, strata = cyl)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+```
+
+Note: rsample can be used to set up cross validation, bootstrap resampling, and more. See <https://www.tidymodels.org/tags/rsample/> for examples.
+
+# Recipes
+
+**Basic Functions:**
+
+-   [recipe()](https://recipes.tidymodels.org/reference/recipe.html) Create a recipe for preprocessing data
+
+-   [formula(*\<recipe\>*)](https://recipes.tidymodels.org/reference/formula.recipe.html) Create a Formula from a Prepared Recipe
+
+-   [print(*\<recipe\>*)](https://recipes.tidymodels.org/reference/print.recipe.html) Print a Recipe
+
+-   [summary(*\<recipe\>*)](https://recipes.tidymodels.org/reference/summary.recipe.html) Summarize a recipe
+
+-   [prep()](https://recipes.tidymodels.org/reference/prep.html) Estimate (e.g., "fit,"train") a preprocessing recipe
+
+-   [bake()](https://recipes.tidymodels.org/reference/bake.html) Apply a trained preprocessing recipe
+
+Some preprocessing steps require you to "fit" or "trained" on data before it can applied to new data. If you are familiar with sklearn.preprocessing functions in **Python**, then these concepts might confuse you in name only - the same process still applies. If your goal is to eventually use the recipe as a preprocessor in modeling, it is suggested that a workflow is used instead of manually estimating a recipe with prep().
+
+Let's build a basic recipe, that references a formula \<mpg \~.\>(predict mpg using all other features) and uses the training data.
+
+```{r}
+basic_recipe <- recipe(mpg ~., data = train_data)
+```
+
+Recipes can be piped so that multiple step functions can be included. In fact, that's a requirement for us here because I included the vehicle name as a feature. Let's see what sort of functions we can apply.
+
+## Functions
+
+For a full list of functions, please visit <https://recipes.tidymodels.org/reference/index.html>
+
+The recipes package has a helpful set of methods for selecting variables within step functions. It uses dplyr like syntax, and helpers from the tidyselect package such as starts_with() or containts(). Additionally, you can select roles, or classes of variables.
+
+### Roles
+
+While some roles set up during the formula process, roles can be manually altered as well. I'll often use these functions to set up ID variables, which can be kept apart of the data, but ignored during modeling tasks. No more splitting and re-joining! Once a role is selected, you can select them in future function steps such as [all_outcomes()](https://recipes.tidymodels.org/reference/has_role.html), [all_predictors()](https://recipes.tidymodels.org/reference/has_role.html), or be even more specific with selections like [all_integer_predictors()](https://recipes.tidymodels.org/reference/has_role.html).
+
+```{r}
+# update variable 'vehicle' to be an id variable.
+basic_recipe <- basic_recipe |>  update_role('vehicle',new_role = 'id variable')
+summary(basic_recipe) |> knitr::kable()
+```
+
+### Imputation
+
+Another powerful feature of the recipes package is the imputation tools. If our data has NAs (it doesn't) we could impute them using methods such as mean, mode, bagged trees, KNN, linear model, or even assign categories to "unknown".
+
+Let's induce some NAs and then see how well it works.
+
+```{r}
+# randomly set 5 vehicle's hp to NA
+data_missing <- data
+data_missing$hp[sample(1:nrow(data), 5)] <- NA
+
+# check
+data_missing |> filter(is.na(hp)) |> knitr::kable()
+
+```
+
+```{r}
+# create, imputation recipe and add imputation step function  
+imputed_recipe <- recipe(mpg ~., data = train_data) |> 
+  update_role('vehicle',new_role = 'id variable') |> 
+  step_impute_linear(hp, impute_with = imp_vars(cyl,disp))
+
+# fit recipe
+imputed_fit <- imputed_recipe |> prep(data_missing)
+imputed_fit |> print()
+
+# apply recipe to the missing data
+imputed_data <- bake(object = imputed_fit, new_data = data_missing) |> 
+  rename(hp_imputed = hp) |> 
+  bind_cols(data |> select(hp_original = hp)) |> 
+  bind_cols(data_missing |> select(hp)) |> 
+  filter(is.na(hp))
+
+# check
+imputed_data |> select(vehicle,hp_imputed,hp_original) |> knitr::kable()
+```
+
+```{r}
+# plot check
+ggplot(imputed_data, aes(x=hp_original, y = hp_imputed)) +
+  geom_abline() +
+  geom_point() + 
+  labs(title='Imputed Values', x='Original',y='Imputed') +
+  theme_bw()
+```
+
+### Individual Transformations
+
+Individual transformations can be performed, and are especially helpful for certain models that require certain assumptions to hold. For example, sometimes it'd be nice to transform a non-normal distribution into a normal distribution, enter the [step_YeoJohnson()](https://recipes.tidymodels.org/reference/step_YeoJohnson.html) function. Other times, there are non-linear relationships that should be adjusted, especially if the model selected expects them to be.
+
+```{r}
+#| warning: false
+library(cowplot)
+
+
+p1 <- ggplot(data, aes(x=hp, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = 'lm', formula =y ~ x,color='red',se = FALSE) +
+  geom_smooth(method = 'loess', formula =y ~ x) +
+  theme_bw() +
+  labs(title = 'No hp transformation')
+
+
+
+p2 <- ggplot(data, aes(x=log(hp), y = mpg)) +
+  geom_point() +
+  geom_smooth(method = 'lm', formula =y ~ x,color='red',se = FALSE) +
+  geom_smooth(method = 'loess', formula =y ~ x) +
+  theme_bw() +
+  labs(title = 'Log(hp) transformation',y='')
+
+plot_grid(p1, p2)
+
+```
+
+```{r}
+# add log step to basic recipe
+basic_recipe <- basic_recipe |> 
+  step_log(hp)
+```
+
+Transformations of variables should be carefully considered, intentionally selected, and properly evaluated. Some methods (linear regression, PCA) require closer attention to the inputs than, say XGBoost. Quick note, [normalization] is covered below.
+
+### Discretization
+
+You can transform continuous variables into discrete variables with these step functions. That said, you *really* need to have a good reason for doing this to predicting variables. Here are just a [few problems](https://discourse.datamethods.org/t/categorizing-continuous-variables/3402) caused by categorizing continuous variables. If you insist on continuing, check out [step_discretize()](https://recipes.tidymodels.org/reference/step_discretize.html) and [step_cut()](https://recipes.tidymodels.org/reference/step_cut.html).
+
+### Dummy Variables and Encoding
+
+Probably the most commonly used functions from this set are [step_dummy()](https://recipes.tidymodels.org/reference/step_dummy.html) and [step_date()](https://recipes.tidymodels.org/reference/step_date.html) or [step_holiday()](https://recipes.tidymodels.org/reference/step_holiday.html) for working with time series data. Creating dummy variables explicitly before passing the data into a model gives you additional control and also sets names that are easier to interpret, set one_hot=TRUE to make sure every category gets encoded.
+
+Example of [step_dummy()](https://recipes.tidymodels.org/reference/step_dummy.html)
+
+```{r}
+# There are three cylinder sizes in the dataset
+data$cyl |> unique() |> sort()
+```
+
+Without one-hot encoding
+
+```{r}
+dummies_recipe <- recipe(mpg ~., data = train_data) |> 
+  update_role('vehicle',new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |> #individual transformation: numeric -> factor
+  step_dummy(cyl) |> # new dummy step
+  prep(train_data) # fit
+
+# apply the recipe to the data
+dummies_data <- bake(dummies_recipe, new_data=NULL) 
+
+dummies_data |> select(starts_with('cyl')) |> names()
+```
+
+With one-hot encoding
+
+```{r}
+dummies_recipe <- recipe(mpg ~., data = train_data) |> 
+  update_role('vehicle',new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |> #individual transformation: numeric -> factor
+  step_dummy(cyl, one_hot = TRUE) |> # new dummy step with one hot
+  prep(train_data) # fit
+
+# apply the recipe to the data
+dummies_data <- bake(dummies_recipe, new_data=NULL) 
+
+dummies_data |> select(starts_with('cyl')) |> names() 
+```
+
+### Interactions
+
+[step_interact()](https://recipes.tidymodels.org/reference/step_interact.html) creates an [interaction](https://www.theanalysisfactor.com/interpreting-interactions-in-regression/) between variables. It is primarily intended for numeric data, or categorical data that has been converted to a dummy step.
+
+```{r}
+interact_recipe <- recipe(mpg ~., data = data) |> 
+  update_role('vehicle',new_role = 'id variable') |> 
+  # create interaction between weight and horsepower
+  step_interact(terms = ~ hp:wt) |> 
+  prep(data)
+
+interact_data <- bake(interact_recipe,new_data = NULL)
+
+interact_data |> select(hp,wt,hp_x_wt) |> head(3) |> knitr::kable()
+```
+
+### Normalization
+
+Normalization step functions are probably the most commonly used and are often necessary for accurate modeling when using methods like PCA or regularized regression such as LASSO.
+
+-   [step_center()](https://recipes.tidymodels.org/reference/step_center.html) Centers numeric data
+
+-   [step_normalize()](https://recipes.tidymodels.org/reference/step_normalize.html) Centers and scales numeric data (**this is probably the one you want!**)
+
+-   [step_range()](https://recipes.tidymodels.org/reference/step_range.html) Scale numeric data to a specific range, helpful for converting scales 1-5 or 0-100, although sometimes [step_percentile()](https://recipes.tidymodels.org/reference/step_percentile.html) is a better fit.
+
+-   [step_scale()](https://recipes.tidymodels.org/reference/step_scale.html) Scale numeric data
+
+Since it's common to apply normalization to all numeric variables, you can select them quickly using [all_numeric()](https://recipes.tidymodels.org/reference/has_role.html) or [all_numeric_predictors()](https://recipes.tidymodels.org/reference/has_role.html).
+
+```{r}
+normalize_recipe <- recipe(mpg ~., data = data) |> 
+  update_role('vehicle',new_role = 'id variable') |> 
+  step_mutate(cyl = as.factor(cyl)) |>
+  # select the vars you want, or just grap all the numeric ones.
+  step_normalize(all_numeric_predictors()) |> 
+  prep(data)
+
+normalize_data <- bake(normalize_recipe, new_data = NULL)
+
+# notice that it skips the cyl (factor) and mpg (outcome) columns!
+normalize_data |> select(vehicle,cyl, disp,hp,mpg) |> head(3) |> knitr::kable()
+```
+
+### Multivariate Transformations
+
+Many different [multivariate transformations](https://recipes.tidymodels.org/reference/index.html#step-functions-multivariate-transformations) are available, from geospatial distance functions to kernel PCA functions. Even one of my favorite algorithms, [step_isomap()](https://recipes.tidymodels.org/reference/step_isomap.html), is available!
+
+Here's and example using [step_pca()](https://recipes.tidymodels.org/reference/step_pca.html). This format is so easy, I often prefer it to more specialized packages when performing EDA or dimensional reduction.
+
+```{r}
+pca_recipe <- recipe(mpg ~hp+wt+cyl+drat+qsec+vehicle, data = data) |>
+  # include vehicle in formula, but then set as ID to keep it.
+  update_role('vehicle', new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |>
+  step_normalize(all_numeric_predictors()) |>  # necessary for PCA!
+  step_pca(all_numeric_predictors(),num_comp = 2) |>  # PCA, keep the top 2 components
+  prep(data)
+
+pca_data <- bake(pca_recipe, new_data = NULL)
+
+# cylinders is not included in the PCA because it is a factor
+# mpg is not included because it is an outcome.
+pca_data |> head(3) |> knitr::kable()
+```
+
+### Filters
+
+Filter step functions are a great way to 'automate' your modeling workflow - that is, to place all your preprocessing steps *within* your recipe. Want to remove pesky columns that have near-zero variance? [step_nzv()](https://recipes.tidymodels.org/reference/step_nzv.html) does that. Want to control for highly correlated columns? [step_corr()](https://recipes.tidymodels.org/reference/step_corr.html) is here to help. There are many different filters to choose from here, all are useful for ensuring your workflow can handle different scenarios.
+
+Example of [step_filter_missing()](https://recipes.tidymodels.org/reference/step_filter_missing.html)
+
+```{r}
+# create missing data
+data_missing <- data
+
+# randomly set 5 vehicle's hp to NA
+data_missing$hp[sample(1:nrow(data), 5)] <- NA
+
+# randomly set 10 vehicle's wt to NA
+data_missing$wt[sample(1:nrow(data), 10)] <- NA
+
+#check
+data_missing |> filter(is.na(hp) | is.na(wt)) |> head(3) |> knitr::kable()
+```
+
+```{r}
+filter_recipe <- recipe(mpg ~hp+wt+cyl+vehicle, data = data_missing) |>
+  # include vehicle in formula, but then set as ID to keep it.
+  update_role('vehicle', new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |>
+  # remove columns with 5% or more missing values
+  step_filter_missing(all_predictors(),threshold=.2) |> 
+  prep(data_missing)
+
+# wt is removed (exceeds threshold), while hp is not
+filter_recipe |> print()
+```
+
+### Row Operations
+
+Row operations are mostly extensions from dplyr with functions such as [step_filter()](https://recipes.tidymodels.org/reference/step_filter.html) and [step_naomit()](https://recipes.tidymodels.org/reference/step_naomit.html). Again, the goal is to build the typical preparation and cleaning operations *into* your workflow. Expect a common input format - then make it useful/understandable.
+
+### Other Step Functions
+
+There are a few miscellaneous step functions that doesn't fall within the normal in the organization structure set up in. A particularly useful one is [step_rename()](https://recipes.tidymodels.org/reference/step_rename.html) for dplyr-like renaming and [step_window()](https://recipes.tidymodels.org/reference/step_window.html) for window functions.
+
+### Check Functions
+
+Check functions are useful for identifying issues before progressing to more intensive steps. If the check fails, it will break the `bake` function and give an error.
+
+Example of [check_missing()](https://recipes.tidymodels.org/reference/check_missing.html)
+
+```{r}
+#| error: true
+
+# reuse missing data.. as expected, gives error.
+check_recipe <- recipe(mpg ~hp+wt+cyl+vehicle, data = data_missing) |>
+  # include vehicle in formula, but then set as ID to keep it.
+  update_role('vehicle', new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |>
+  # create error if there are any missing values in the predicting values
+  check_missing(all_predictors()) |> 
+  prep(data_missing)
+```
+
+### Internal Step Handling
+
+Finally, there are a few functions that help manage the naming of variables, adding steps or checks, and inspecting recipes. Two ones that I use to debug are [detect_step()](https://recipes.tidymodels.org/reference/detect_step.html) and [fully_trained()](https://recipes.tidymodels.org/reference/fully_trained.html).
+
+```{r}
+
+internal_recipe <-recipe(mpg ~hp+wt+cyl+vehicle, data = data) |>
+  update_role('vehicle', new_role = 'id variable') |>  
+  step_mutate(cyl = as.factor(cyl)) |>
+  step_BoxCox(all_numeric())
+
+# is the recipe trained/fit? false
+internal_recipe |> fully_trained()
+
+```
+
+```{r}
+# ok, train it
+internal_recipe <- internal_recipe |> prep(data)
+
+# is the recipe fit? true!
+internal_recipe |> fully_trained()
+```
+
+```{r}
+# did the recipe use step_Yeo_Johnson? false
+internal_recipe |> detect_step('YeoJohnson')
+```
+
+```{r}
+# did it use step_BoxCox? true
+internal_recipe |> detect_step('BoxCox')
+```
+
+# Creating a Workflow
+
+Let's put a entire workflow together and build a small model. But before we do that using a workflow, I want to demonstrate the advantages of a workflow that integrates a the preprocessing steps vs. the typical approach of preprocessing the data first, then passing it to a model.
+
+```{r}
+# Set seed for replication
+set.seed(1212022)
+
+# Put 3/4 of the data into the training set 
+data_split <- initial_split(data, prop = 3/4, strata = cyl)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+
+# set up final recipe
+final_recipe <- recipe(mpg~.,data = train_data) |> 
+  # set some of the variables to 
+  update_role(vehicle,am,vs,gear,qsec, new_role = 'id variable') |> 
+  # set cyl as factor
+  step_mutate(cyl = as.factor(cyl)) |>
+  # dummy step cyl
+  step_dummy(cyl, one_hot = TRUE) |> 
+  # take log of hp
+  step_log(hp)
+
+# check recipe
+final_recipe |> print()
+
+```
+
+First, let's show why using a workflow is preferred to manually using prep.
+
+```{r}
+# manually train recipe
+final_recipe <- final_recipe |> prep(train_data)
+
+# check if trained: true
+final_recipe |> fully_trained()
+```
+
+Set the model.
+
+```{r}
+# set model engine
+lm_model <- linear_reg() |> set_engine('lm')
+```
+
+Normally, we'd preprocess the data and then pass it into the model training. However... this doesn't work very well when we're using more complicated preprocessing recipes. Notice that the model isn't using the formula and roles used in the data, it's just using the preprocessed data, not exactly what we intended.
+
+```{r}
+# prep the data 
+data_prepped <- prep(final_recipe, train_data)
+
+# fit the model
+linear_reg_fit <- fit(lm_model,mpg~.,data = juice(data_prepped))
+
+# wait. oh no.
+linear_reg_fit
+```
+
+To fix this, we need to carefully monitor both our preprocessing steps and our model inputs... or we could just feed our preprocessing steps directly into our model and let that dictate what it should do (much easier).
+
+We'd like the recipe to seamlessly feed into the model. To do that, we need a workflow with a our recipe and a model.
+
+```{r}
+
+# set up final recipe
+final_recipe <- recipe(mpg~.,data = train_data) |> 
+  # set some of the variables to 
+  update_role(vehicle,am,vs,gear,qsec,drat, new_role = 'id variable') |> 
+  # set cyl as factor
+  step_mutate(cyl = as.factor(cyl)) |>
+  # dummy step cyl
+  step_dummy(cyl, one_hot = TRUE) |> 
+  # take log of hp
+  step_log(hp)
+
+# set model engine
+lm_model <- linear_reg() |> set_engine('lm')
+
+# create workflow object
+example_workflow <- workflow() |> 
+  # add recipe
+  add_recipe(final_recipe) |> 
+  # add model
+  add_model(lm_model)
+
+# prepare the recipe and estimate the model in a single call
+example_workflow_fit <- fit(example_workflow, data = train_data)
+
+# print model
+example_workflow_fit
+
+```
+
+Okay, our model is trained. Let's see how it did on the test data. Not bad. Maybe a little heteroskedasticity, but a good first attempt.
+
+```{r}
+#| warning: false
+
+# collect predictions on test data
+data_test_preds <- predict(example_workflow_fit, new_data = test_data) |> 
+  bind_cols(test_data) |> 
+  select(vehicle,mpg,cyl,hp,.pred)
+
+# print predictions
+data_test_preds |> knitr::kable()
+
+# plot check
+ggplot(data_test_preds, aes(x=mpg, y = .pred)) +
+geom_abline() +
+geom_point() + 
+labs(title='Test Data, Estimated MPG', x='Original',y='Estimated') +
+theme_bw()
+
+# rsq check
+rsq(data_test_preds,mpg,.pred)
+```
+
+To learn more about workflows, visit <https://workflows.tidymodels.org/> and check out their [getting started](https://workflows.tidymodels.org/articles/extras/getting-started.html#the-test-set) information.
+
+Once you get the hang of recipes and building simple workflows, it's a small step into resampling, parameter optimization, and improved model evaluation - all within the tidymodels framework.

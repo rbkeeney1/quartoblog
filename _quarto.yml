@@ -25,22 +25,27 @@ website:
         icon: person
       - href: helpful_links.qmd
         text: Resources and Links
-      - section: "NLP"
+      - section: "Data Prep"
         contents: 
-        - href: posts/avatar_vader.qmd
-          text: VADAR Sentiment Scores
+        - href: posts/tidymodels_recipes.qmd
+          text: Prepocessing data in R
+      #- section: "Data Visualization"
+        #contents:
+      - section: "Supervised Learning"
+        contents: 
+        - href: posts/anova_introduction.qmd
+          text: ANOVA 101
       - section: "Unsupervised Learning"
         contents: 
         - href: posts/PCA_eu_food.ipynb
           text: PCA with EU Foods
         - href: posts/ISOMAP_faces.ipynb
           text: ISOMAP vs PCA
-      #- section: "Supervised Learning"
-      #- section: "Data Visualization"
-      - section: "Applied Stats and EDA"
+      - section: "NLP"
         contents: 
-        - href: posts/anova_introduction.qmd
-          text: ANOVA 101
+        - href: posts/avatar_vader.qmd
+          text: VADAR Sentiment Scores
+
           
   page-footer: 
     left: "Copyright 2023, Ryan Keeney" 
