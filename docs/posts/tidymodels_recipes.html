@@ -8,7 +8,7 @@
 
 <meta name="author" content="Ryan Keeney">
 
-<title>Ryan Keeney - Prepocessing data in R</title>
+<title>Ryan Keeney - Preprocessing data in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Prepocessing data in R</h1>
+      <h1 class="quarto-secondary-nav-title">Preprocessing data in R</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -279,7 +279,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Prepocessing data in R</h1>
+<h1 class="title d-none d-lg-block">Preprocessing data in R</h1>
 </div>
 
 
@@ -318,18 +318,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
-<col style="width: 17%">
+<col style="width: 26%">
+<col style="width: 7%">
+<col style="width: 5%">
 <col style="width: 8%">
-<col style="width: 6%">
-<col style="width: 9%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
 <col style="width: 4%">
-<col style="width: 8%">
-<col style="width: 9%">
-<col style="width: 9%">
 <col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 7%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -349,46 +349,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Fiat X1-9</td>
-<td style="text-align: right;">27.3</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">79.0</td>
-<td style="text-align: right;">66</td>
-<td style="text-align: right;">4.08</td>
-<td style="text-align: right;">1.935</td>
+<td style="text-align: left;">Merc 280C</td>
+<td style="text-align: right;">17.8</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">167.6</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">3.92</td>
+<td style="text-align: right;">3.440</td>
 <td style="text-align: right;">18.90</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Fiat 128</td>
-<td style="text-align: right;">32.4</td>
+<td style="text-align: left;">Toyota Corolla</td>
+<td style="text-align: right;">33.9</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">78.7</td>
-<td style="text-align: right;">66</td>
-<td style="text-align: right;">4.08</td>
-<td style="text-align: right;">2.200</td>
-<td style="text-align: right;">19.47</td>
+<td style="text-align: right;">71.1</td>
+<td style="text-align: right;">65</td>
+<td style="text-align: right;">4.22</td>
+<td style="text-align: right;">1.835</td>
+<td style="text-align: right;">19.90</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Datsun 710</td>
-<td style="text-align: right;">22.8</td>
+<td style="text-align: left;">Cadillac Fleetwood</td>
+<td style="text-align: right;">10.4</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">472.0</td>
+<td style="text-align: right;">205</td>
+<td style="text-align: right;">2.93</td>
+<td style="text-align: right;">5.250</td>
+<td style="text-align: right;">17.98</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">108.0</td>
-<td style="text-align: right;">93</td>
-<td style="text-align: right;">3.85</td>
-<td style="text-align: right;">2.320</td>
-<td style="text-align: right;">18.61</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
 </tr>
 </tbody>
 </table>

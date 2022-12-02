@@ -1,5 +1,5 @@
 ---
-title: "Prepocessing data in R"
+title: "Preprocessing data in R"
 author: "Ryan Keeney"
 editor: visual
 execute:
