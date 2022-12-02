@@ -77,7 +77,9 @@ Recipes can be piped so that multiple step functions can be included. In fact, t
 
 For a full list of functions, please visit <https://recipes.tidymodels.org/reference/index.html>
 
-The recipes package has a helpful set of methods for selecting variables within step functions. It uses dplyr like syntax, and helpers from the tidyselect package such as starts_with() or containts(). Additionally, you can select roles, or classes of variables.
+### Selecting variables within functions
+
+The recipes package has a helpful set of methods for selecting variables within step functions. It uses dplyr like syntax, and helpers from the [tidyselect](https://tidyselect.r-lib.org/index.html) package such as [starts_with()](https://tidyselect.r-lib.org/reference/starts_with.html) or [contains()](https://tidyselect.r-lib.org/reference/starts_with.html). Additionally, you can select roles, or classes of variables.
 
 ### Roles
 
@@ -308,7 +310,7 @@ filter_recipe <- recipe(mpg ~hp+wt+cyl+vehicle, data = data_missing) |>
   # include vehicle in formula, but then set as ID to keep it.
   update_role('vehicle', new_role = 'id variable') |>  
   step_mutate(cyl = as.factor(cyl)) |>
-  # remove columns with 5% or more missing values
+  # remove columns with more than 20% missing values
   step_filter_missing(all_predictors(),threshold=.2) |> 
   prep(data_missing)
 

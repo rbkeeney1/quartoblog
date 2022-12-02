@@ -255,6 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
+  <li><a href="#selecting-variables-within-functions" id="toc-selecting-variables-within-functions" class="nav-link" data-scroll-target="#selecting-variables-within-functions">Selecting variables within functions</a></li>
   <li><a href="#roles" id="toc-roles" class="nav-link" data-scroll-target="#roles">Roles</a></li>
   <li><a href="#imputation" id="toc-imputation" class="nav-link" data-scroll-target="#imputation">Imputation</a></li>
   <li><a href="#individual-transformations" id="toc-individual-transformations" class="nav-link" data-scroll-target="#individual-transformations">Individual Transformations</a></li>
@@ -318,14 +319,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
-<col style="width: 26%">
+<col style="width: 21%">
 <col style="width: 7%">
-<col style="width: 5%">
-<col style="width: 8%">
-<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 6%">
 <col style="width: 7%">
-<col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 7%">
 <col style="width: 4%">
 <col style="width: 4%">
 <col style="width: 7%">
@@ -349,46 +350,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Merc 280C</td>
-<td style="text-align: right;">17.8</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">167.6</td>
-<td style="text-align: right;">123</td>
-<td style="text-align: right;">3.92</td>
-<td style="text-align: right;">3.440</td>
-<td style="text-align: right;">18.90</td>
+<td style="text-align: left;">Merc 240D</td>
+<td style="text-align: right;">24.4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">146.7</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">3.69</td>
+<td style="text-align: right;">3.19</td>
+<td style="text-align: right;">20.0</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Toyota Corolla</td>
-<td style="text-align: right;">33.9</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">71.1</td>
-<td style="text-align: right;">65</td>
-<td style="text-align: right;">4.22</td>
-<td style="text-align: right;">1.835</td>
-<td style="text-align: right;">19.90</td>
+<td style="text-align: left;">Maserati Bora</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">301.0</td>
+<td style="text-align: right;">335</td>
+<td style="text-align: right;">3.54</td>
+<td style="text-align: right;">3.57</td>
+<td style="text-align: right;">14.6</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Cadillac Fleetwood</td>
-<td style="text-align: right;">10.4</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">472.0</td>
-<td style="text-align: right;">205</td>
-<td style="text-align: right;">2.93</td>
-<td style="text-align: right;">5.250</td>
-<td style="text-align: right;">17.98</td>
+<td style="text-align: left;">Ferrari Dino</td>
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">145.0</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: right;">3.62</td>
+<td style="text-align: right;">2.77</td>
+<td style="text-align: right;">15.5</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
 </tr>
 </tbody>
 </table>
@@ -431,7 +432,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <p>For a full list of functions, please visit <a href="https://recipes.tidymodels.org/reference/index.html" class="uri">https://recipes.tidymodels.org/reference/index.html</a></p>
-<p>The recipes package has a helpful set of methods for selecting variables within step functions. It uses dplyr like syntax, and helpers from the tidyselect package such as starts_with() or containts(). Additionally, you can select roles, or classes of variables.</p>
+<section id="selecting-variables-within-functions" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-variables-within-functions">Selecting variables within functions</h3>
+<p>The recipes package has a helpful set of methods for selecting variables within step functions. It uses dplyr like syntax, and helpers from the <a href="https://tidyselect.r-lib.org/index.html">tidyselect</a> package such as <a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with()</a> or <a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains()</a>. Additionally, you can select roles, or classes of variables.</p>
+</section>
 <section id="roles" class="level3">
 <h3 class="anchored" data-anchor-id="roles">Roles</h3>
 <p>While some roles set up during the formula process, roles can be manually altered as well. I’ll often use these functions to set up ID variables, which can be kept apart of the data, but ignored during modeling tasks. No more splitting and re-joining! Once a role is selected, you can select them in future function steps such as <a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes()</a>, <a href="https://recipes.tidymodels.org/reference/has_role.html">all_predictors()</a>, or be even more specific with selections like <a href="https://recipes.tidymodels.org/reference/has_role.html">all_integer_predictors()</a>.</p>
@@ -1058,7 +1062,7 @@ Linear regression imputation for hp [trained]</code></pre>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># include vehicle in formula, but then set as ID to keep it.</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_role</span>(<span class="st">'vehicle'</span>, <span class="at">new_role =</span> <span class="st">'id variable'</span>) <span class="sc">|&gt;</span>  </span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">cyl =</span> <span class="fu">as.factor</span>(cyl)) <span class="sc">|&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove columns with 5% or more missing values</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove columns with more than 20% missing values</span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_filter_missing</span>(<span class="fu">all_predictors</span>(),<span class="at">threshold=</span>.<span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_missing)</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
