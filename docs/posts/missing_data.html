@@ -260,7 +260,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#methods-for-handling-missing-data" id="toc-methods-for-handling-missing-data" class="nav-link" data-scroll-target="#methods-for-handling-missing-data">Methods for handling missing data</a>
   <ul class="collapse">
-  <li><a href="#example-loading-and-preparing-data" id="toc-example-loading-and-preparing-data" class="nav-link" data-scroll-target="#example-loading-and-preparing-data">Example: Loading and Preparing Data</a></li>
   <li><a href="#omit-missing-data" id="toc-omit-missing-data" class="nav-link" data-scroll-target="#omit-missing-data">Omit missing data</a>
   <ul class="collapse">
   <li><a href="#example-omit" id="toc-example-omit" class="nav-link" data-scroll-target="#example-omit">Example: Omit</a></li>
@@ -352,8 +351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Use categorical variables to indicate missing data</li>
 <li>Estimate (impute) missing data</li>
 </ol>
-<section id="example-loading-and-preparing-data" class="level3">
-<h3 class="anchored" data-anchor-id="example-loading-and-preparing-data">Example: Loading and Preparing Data</h3>
+<p><strong>Loading and Preparing Data</strong></p>
 <p>I’ll be using the <a href="https://www.tidymodels.org/start/recipes/">recipe</a> library from <a href="https://www.tidymodels.org/">tidymodels</a>, which was previously discussed <a href="https://rbkeeney1.github.io/quartoblog/posts/tidymodels_recipes.html">here</a>, and the <a href="https://allisonhorst.github.io/palmerpenguins/">palmerpenguins</a> data as our example data.</p>
 <p>First, let’s load the data.</p>
 <div class="cell">
@@ -399,7 +397,7 @@ flipper_length_mm       body_mass_g               sex
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>data_train <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>data_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>scenario</p>
+<p>Set up missing data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># no missing</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_train_full <span class="ot">&lt;-</span> data_train</span>
@@ -432,7 +430,6 @@ flipper_length_mm       body_mass_g               sex
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set up base recipe</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rec_base <span class="ot">&lt;-</span> <span class="fu">recipe</span>(species<span class="sc">~</span>., <span class="at">data=</span>data_train_missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
 <section id="omit-missing-data" class="level2">
 <h2 class="anchored" data-anchor-id="omit-missing-data">Omit missing data</h2>
 <p>The first option is to simply omit or discard the missing data. That’s easy to implement and doesn’t potentially induce errors. However, you have to weight this against the risk of losing too many data points - many large data have hundreds or thousands of variables, if you removed any data point with a missing variables you could eliminate practically the entire data. Additionally, simply removing data creates the potential for for censored or biased missing data.</p>
@@ -449,7 +446,7 @@ flipper_length_mm       body_mass_g               sex
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># we lose about 100 data points if we choose to omit all the missing data!</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>data_omit <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 145</code></pre>
+<pre><code>[1] 138</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data_train_full <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -510,7 +507,7 @@ flipper_length_mm       body_mass_g               sex
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert the missing category to a factor</span></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">bill_length_missing =</span> <span class="fu">as.factor</span>(bill_length_missing)) <span class="sc">|&gt;</span> </span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dummy step with one hot encoding</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(bill_length_missing,<span class="at">one_hot =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(bill_length_missing,<span class="at">one_hot =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set interaction term between the missing  category and all other vars</span></span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span>bill_length_missing_Yes<span class="sc">:</span><span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
@@ -522,23 +519,21 @@ flipper_length_mm       body_mass_g               sex
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># these are the new variables for the model</span></span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>data_cat_num <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "island"                                          
- [2] "bill_length_mm"                                  
- [3] "bill_depth_mm"                                   
- [4] "flipper_length_mm"                               
- [5] "body_mass_g"                                     
- [6] "sex"                                             
- [7] "species"                                         
- [8] "bill_length_missing_No"                          
- [9] "bill_length_missing_Yes"                         
-[10] "bill_length_missing_Yes_x_islandDream"           
-[11] "bill_length_missing_Yes_x_islandTorgersen"       
-[12] "bill_length_missing_Yes_x_bill_length_mm"        
-[13] "bill_length_missing_Yes_x_bill_depth_mm"         
-[14] "bill_length_missing_Yes_x_flipper_length_mm"     
-[15] "bill_length_missing_Yes_x_body_mass_g"           
-[16] "bill_length_missing_Yes_x_sexmale"               
-[17] "bill_length_missing_Yes_x_bill_length_missing_No"</code></pre>
+<pre><code> [1] "island"                                     
+ [2] "bill_length_mm"                             
+ [3] "bill_depth_mm"                              
+ [4] "flipper_length_mm"                          
+ [5] "body_mass_g"                                
+ [6] "sex"                                        
+ [7] "species"                                    
+ [8] "bill_length_missing_Yes"                    
+ [9] "bill_length_missing_Yes_x_islandDream"      
+[10] "bill_length_missing_Yes_x_islandTorgersen"  
+[11] "bill_length_missing_Yes_x_bill_length_mm"   
+[12] "bill_length_missing_Yes_x_bill_depth_mm"    
+[13] "bill_length_missing_Yes_x_flipper_length_mm"
+[14] "bill_length_missing_Yes_x_body_mass_g"      
+[15] "bill_length_missing_Yes_x_sexmale"          </code></pre>
 </div>
 </div>
 </section>
@@ -615,22 +610,25 @@ flipper_length_mm       body_mass_g               sex
 <p>Let’s estimate a few of the numerical values with different methods. <a href="https://rsample.tidymodels.org/reference/permutations.html">Permutation sampling</a> is covered in <code>rsample</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rec_impute <span class="ot">&lt;-</span> rec_base <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute bill length and depth with mean</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute bill length, depth and flipper length with mean</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mean</span>(bill_length_mm,bill_depth_mm,flipper_length_mm) <span class="sc">|&gt;</span> </span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute sex with mode</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mode</span>(sex) <span class="sc">|&gt;</span> </span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute body mass with linear model mass ~ sex + bill_length_mm +bill_depth_mm</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_linear</span>(body_mass_g, <span class="at">impute_with =</span> <span class="fu">imp_vars</span>(sex,bill_length_mm,bill_depth_mm)) <span class="sc">|&gt;</span> </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute island with knn</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_knn</span>(island, <span class="at">neighbors =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>data_impute <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_impute, <span class="at">new_data=</span><span class="cn">NULL</span>)</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(data_impute))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute body mass with linear model</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mass ~ sex + bill_length_mm +bill_depth_mm +flipper_length_mm</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_linear</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    body_mass_g, </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">impute_with =</span> <span class="fu">imp_vars</span>(sex,bill_length_mm,bill_depth_mm,flipper_length_mm)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute island with knn</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_knn</span>(island, <span class="at">neighbors =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>data_impute <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_impute, <span class="at">new_data=</span><span class="cn">NULL</span>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(data_impute))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           island    bill_length_mm     bill_depth_mm flipper_length_mm 
                 0                 0                 0                 0 

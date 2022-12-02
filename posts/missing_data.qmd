@@ -56,7 +56,7 @@ Ideally, missing data has been discussed, planned for, and negated *well in adva
 2.  Use categorical variables to indicate missing data
 3.  Estimate (impute) missing data
 
-### Example: Loading and Preparing Data
+**Loading and Preparing Data**
 
 I'll be using the [recipe](https://www.tidymodels.org/start/recipes/) library from [tidymodels](https://www.tidymodels.org/), which was previously discussed [here](https://rbkeeney1.github.io/quartoblog/posts/tidymodels_recipes.html), and the [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/) data as our example data.
 
@@ -98,7 +98,7 @@ data_train <- training(data_split)
 data_test  <- testing(data_split)
 ```
 
-scenario
+Set up missing data
 
 ```{r}
 # no missing
@@ -192,7 +192,7 @@ rec_cat_num <- rec_base |>
   # convert the missing category to a factor
   step_mutate(bill_length_missing = as.factor(bill_length_missing)) |> 
   # dummy step with one hot encoding
-  step_dummy(bill_length_missing,one_hot = TRUE) |> 
+  step_dummy(bill_length_missing,one_hot = FALSE) |> 
   # set interaction term between the missing  category and all other vars
   step_interact(terms = ~bill_length_missing_Yes:all_predictors()) |> 
   # train
@@ -250,12 +250,15 @@ Let's estimate a few of the numerical values with different methods. [Permutatio
 
 ```{r}
 rec_impute <- rec_base |> 
-  # impute bill length and depth with mean
+  # impute bill length, depth and flipper length with mean
   step_impute_mean(bill_length_mm,bill_depth_mm,flipper_length_mm) |> 
   # impute sex with mode
   step_impute_mode(sex) |> 
-  # impute body mass with linear model mass ~ sex + bill_length_mm +bill_depth_mm
-  step_impute_linear(body_mass_g, impute_with = imp_vars(sex,bill_length_mm,bill_depth_mm)) |> 
+  # impute body mass with linear model
+  # mass ~ sex + bill_length_mm +bill_depth_mm +flipper_length_mm
+  step_impute_linear(
+    body_mass_g, 
+    impute_with = imp_vars(sex,bill_length_mm,bill_depth_mm,flipper_length_mm)) |> 
   # impute island with knn
   step_impute_knn(island, neighbors = 5) |> 
   # train
