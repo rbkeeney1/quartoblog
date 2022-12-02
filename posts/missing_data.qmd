@@ -1,0 +1,293 @@
+---
+title: "Missing Data"
+author: "Ryan Keeney"
+editor: visual
+execute:
+  freeze: auto
+---
+
+# Introduction
+
+In this post, we will review types of missing data and methods for dealing with missing data. Data is often missing, wrong, and generally just has a lot of problems.
+
+-   Measurement gauges break down
+
+-   Recording errors occur during transmission, data entry, and storage.
+
+-   Human interaction causes a variety of challenges such as incorrect inputs, withheld or unavailable data, or medical history.
+
+> *This post does not deal with censored data. Censored data occurs when an data point has not yet been observed. For example, if you are studying a components reliability, it may be unrealistic to run all the components to failure. If a test is suspended without the component failing, then it's actual failure point is censored - you only know the lower-bound of the components life-time. Bayesian approaches are particularly effective when censored data occurs in time-to-event applications such as reliability theory, survival theory (healthcare outcomes), and geoscientific predictions (when will Mount Rainier erupt next?).*
+
+## Types of missing data
+
+**Missing Completely At Random (MCAR)**: Missingness does not depend on observed or unobserved data. There is no systematic differences between what is observed and what is not.
+
+-   Easy to deal with
+
+-   Ignorable missingness
+
+**Missing At Random (MAR)**: Missingness depends only on the observed data. MAR occurs when the missingness is **not** random - there are systematic differences between what is observed and what is not - but where missingness can be fully accounted for by variables where there is complete information.
+
+-   Easy to deal with
+
+-   Ignorable missingness
+
+The missing data correlated to other data in the data set. For example, perhaps it's dangerous (to us) to measure the bills of large and aggressive penguins, so that variable may be missing or inaccurately measured for those types of penguins.
+
+**Missing Not At Random (MNAR)**: Neither MCAR, nor MAR hold; missingness may depend on the data that is missing - there are systematic differences between what is observed and what is not - and the causes are not accounted for. Usually, MNAR indicates that the situations at which missingness occurs depends on hidden or unobserved causes. This is the most dangerous and difficult type of missingness.
+
+-   Difficult to deal with
+
+-   Non-ignorable missingness
+
+When the data is Missing Not At Random (MNAR), which missing values may depend on other factors such as data collection design, reporting biases, selection biases.
+
+## Patterns in missing data
+
+Some factors that are more likely to be missing (e.g. due to difficulty of collection, or isn't standard to be collected).
+
+Other factor types are more likely to be missing as well for more complex reasons (e.g. bias for or not providing income levels, a radar gun used for speeds outside its operating range, death date won't be recorded for living patients). This results in bias, and must be accounted for differently.
+
+# Methods for handling missing data
+
+Ideally, missing data has been discussed, planned for, and negated *well in advance* of the modeling stage. However, missing data is a reality for data scientists even in the best situations. We'll be covering three common methods for handling missing data, discuss their pros and cos, and demo them in R.
+
+1.  Omit missing data
+2.  Use categorical variables to indicate missing data
+3.  Estimate (impute) missing data
+
+### Example: Loading and Preparing Data
+
+I'll be using the [recipe](https://www.tidymodels.org/start/recipes/) library from [tidymodels](https://www.tidymodels.org/), which was previously discussed [here](https://rbkeeney1.github.io/quartoblog/posts/tidymodels_recipes.html), and the [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/) data as our example data.
+
+First, let's load the data.
+
+```{r}
+#| warning: false
+
+# libraries
+library(palmerpenguins) # data, loads into 'penguins' and 'penguins_raw'
+library(tidymodels) # preprocessing recipes and other tools
+```
+
+The data contain information for 344 penguins. There are 3 different species of penguins, collected from 3 islands in the Palmer Archipelago, Antarctica. It includes size measurements for adult foraging penguins near Palmer Station, Antarctica.
+
+```{r}
+# features available
+penguins |> str()
+```
+
+The data contains 333 complete cases, with 19 missing values.
+
+```{r}
+# count NA by variable
+colSums(is.na(penguins))
+```
+
+Since I want full control over the data, I'm going to omit the 19 missing values, split the data into test and training sets, then intentionally set up multiple missing data scenarios for comparison.
+
+```{r}
+# remove NAs from penguins
+data <- penguins |> na.omit()
+
+# Put 3/4 of the data into the training set 
+data_split <- initial_split(data, prop = 3/4, strata = species)
+
+# Create data frames for the two sets
+data_train <- training(data_split)
+data_test  <- testing(data_split)
+```
+
+scenario
+
+```{r}
+# no missing
+data_train_full <- data_train
+
+# missing data
+data_train_missing <- data_train
+
+# randomly drop 20% of island
+data_train_missing$island[sample(1:nrow(data_train_missing), 49)] <- NA
+
+# randomly drop 10% of bill length and depth
+data_train_missing$bill_length_mm[sample(1:nrow(data_train_missing), 24)] <- NA
+data_train_missing$bill_depth_mm[sample(1:nrow(data_train_missing), 24)] <- NA
+
+# randomly drop 5% of all others
+data_train_missing$flipper_length_mm[sample(1:nrow(data_train_missing), 12)] <- NA
+data_train_missing$body_mass_g[sample(1:nrow(data_train_missing), 12)] <- NA
+data_train_missing$sex[sample(1:nrow(data_train_missing), 12)] <- NA
+
+# check
+colSums(is.na(data_train_missing))
+```
+
+```{r}
+# set up base recipe
+rec_base <- recipe(species~., data=data_train_missing)
+```
+
+## Omit missing data
+
+The first option is to simply omit or discard the missing data. That's easy to implement and doesn't potentially induce errors. However, you have to weight this against the risk of losing too many data points - many large data have hundreds or thousands of variables, if you removed any data point with a missing variables you could eliminate practically the entire data. Additionally, simply removing data creates the potential for for censored or biased missing data.
+
+### Example: Omit
+
+```{r}
+rec_omit <- rec_base |> 
+  step_naomit(all_predictors()) |> 
+  prep(data_train_missing)
+
+# apply to missing data
+data_omit <- bake(rec_omit, new_data=NULL) 
+
+# we lose about 100 data points if we choose to omit all the missing data!
+data_omit |> nrow()
+data_train_full |> nrow()
+```
+
+## Use categorical variables to indicate missing data
+
+The missing data can be biased! To account for that we can include interactions.
+
+If we include interaction terms between the new categorical variable and all other variables, then essentially we're creating two separate models. One for when there's missing data in this variable and one for when there isn't. So it's really like a tree model with a single branch.
+
+### Example: Categorical value
+
+Here, I build a categorical missing value for island.
+
+```{r}
+rec_cat <- rec_base |> 
+  # convert to character (easier)
+  step_mutate(island = as.character(island)) |>
+  # Change NA -> "Missing"
+  step_mutate(island = ifelse(is.na(island),'Missing',island)) |>
+  # covert back to factor
+  step_mutate(island = as.factor(island)) |>
+  # dummy step with one hot encoding
+  step_dummy(island,one_hot = TRUE) |> 
+  # set interaction term between the missing island category and all other vars
+  step_interact(terms = ~island_Missing:all_predictors()) |> 
+  # train
+  prep(data_train_missing)
+
+# apply to missing data
+data_cat <- bake(rec_cat, new_data=NULL)
+
+# these are the new variables for the model
+data_cat |> names()
+```
+
+### Example: Categorical value for numeric data
+
+For numerical values, set NA = 0 and then add in a missing column. In this example, I create a missing term for bill length, then create the required interaction terms.
+
+```{r}
+rec_cat_num <- rec_base |> 
+  # set up missing category
+  step_mutate(bill_length_missing = ifelse(is.na(bill_length_mm),'Yes','No')) |>
+  # set bill length -> 0 if NA
+  step_mutate(bill_length_mm = ifelse(is.na(bill_length_mm),0,bill_length_mm)) |>
+  # convert the missing category to a factor
+  step_mutate(bill_length_missing = as.factor(bill_length_missing)) |> 
+  # dummy step with one hot encoding
+  step_dummy(bill_length_missing,one_hot = TRUE) |> 
+  # set interaction term between the missing  category and all other vars
+  step_interact(terms = ~bill_length_missing_Yes:all_predictors()) |> 
+  # train
+  prep(data_train_missing)
+
+# apply to missing data
+data_cat_num <- bake(rec_cat_num, new_data=NULL)
+
+# these are the new variables for the model
+data_cat_num |> names()
+```
+
+## Estimate missing data
+
+### General guidelines for imputation
+
+-   Data is used twice, so it can lead to over-fitting
+
+-   Limit the amount of imputation to no more than 5% per factor
+
+-   If more than 5% is missing, use omission or categorical value methods
+
+### Approaches to imputation
+
+-   **Mid-range value**: use mean, median (numeric), or mode (categorical)
+
+-   **Regression**: Reduce or eliminate the problem of bias by using other factors to predict the missing value. Essentially, build a model for each factor.
+
+-   **Perturbation**: Accounts for bias and variability. Essentially, add perturbation to each imputed variable (e.g. adjust up/down a random amount from the normally distributed variation).
+
++-----------------+---------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| Method          | Pro                                         | Con                                                                                                                          |
++=================+=============================================+==============================================================================================================================+
+| Mid-range value | -   Hedge against being too wrong           | -   Biased imputation (e.g. if high-income people are less likely to answer the mean/median will be underestimate the value) |
+|                 | -   Easy to compute                         |                                                                                                                              |
++-----------------+---------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| Regression      | -   Reduce or eliminate the problem of bias | -   Complex to build, fit, validate, and test additional models                                                              |
+|                 |                                             |                                                                                                                              |
+|                 |                                             | -   Does not capture all the variability                                                                                     |
+|                 |                                             |                                                                                                                              |
+|                 |                                             | -   Uses the data twice, so it could over-fit                                                                                |
++-----------------+---------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+| Perturbation    | -   More accurate variability               | -   Less accurate on average                                                                                                 |
++-----------------+---------------------------------------------+------------------------------------------------------------------------------------------------------------------------------+
+
+**Do we add additional error from imputation and perturbation?**
+
+Yup! `Total error = Imputation error + perturbation error + model error`. However, regular data almost certainly has errors as well. It's up to you as the data scientist to decide what trade-offs to make in a given situation.
+
+There are many approaches to imputation. For example, advanced methods like multivariate imputation by chained equations (MICE) can impute multiple factor values together.
+
+### Example: Estimation (Imputation)
+
+Let's estimate a few of the numerical values with different methods. [Permutation sampling](https://rsample.tidymodels.org/reference/permutations.html) is covered in `rsample`.
+
+```{r}
+rec_impute <- rec_base |> 
+  # impute bill length and depth with mean
+  step_impute_mean(bill_length_mm,bill_depth_mm,flipper_length_mm) |> 
+  # impute sex with mode
+  step_impute_mode(sex) |> 
+  # impute body mass with linear model mass ~ sex + bill_length_mm +bill_depth_mm
+  step_impute_linear(body_mass_g, impute_with = imp_vars(sex,bill_length_mm,bill_depth_mm)) |> 
+  # impute island with knn
+  step_impute_knn(island, neighbors = 5) |> 
+  # train
+  prep(data_train_missing)
+  
+# apply to missing data
+data_impute <- bake(rec_impute, new_data=NULL)
+
+# check
+colSums(is.na(data_impute))
+```
+
+# Summarizing Methods
+
++-------------------+-----------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Method            | Pro                                     | Con                                                                                                                                            |
++===================+=========================================+================================================================================================================================================+
+| Discard           | -   Not potentially introducing errors  | -   Don't want to lose to many data points                                                                                                     |
+|                   |                                         |                                                                                                                                                |
+|                   | -   Easy to implement                   | -   Potential for censored or biased missing data                                                                                              |
++-------------------+-----------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Categorical Value | -   Works well if factor is categorical | -   Difficult for continuous data, but could set to zero an add a new factor to show if it's missing or not.                                   |
+|                   |                                         |                                                                                                                                                |
+|                   |                                         | -   Potential for censored or biased missing data (coefficients of other variables are pulled up/down to try and account for the missing data) |
++-------------------+-----------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Estimate (Impute) | -   Reduces bias                        | -   Data is used twice, so it can lead to over-fitting                                                                                         |
+|                   |                                         |                                                                                                                                                |
+|                   |                                         | -   Limit to 5% per factor                                                                                                                     |
+|                   |                                         |                                                                                                                                                |
+|                   |                                         | -   Per data point, limit to 5% or use omission or categorical variable.                                                                       |
++-------------------+-----------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+
+# Citations
+
+Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0. https://allisonhorst.github.io/palmerpenguins/. doi: 10.5281/zenodo.3960218.

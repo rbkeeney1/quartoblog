@@ -29,6 +29,8 @@ website:
         contents: 
         - href: posts/tidymodels_recipes.qmd
           text: Preprocessing data in R
+        - href: posts/missing_data.qmd
+          text: Missing Data
       #- section: "Data Visualization"
         #contents:
       - section: "Supervised Learning"

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ryan Keeney">
+
+<title>Ryan Keeney - Missing Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Missing Data</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../" class="sidebar-logo-link">
+      <img src="../headshot.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Ryan Keeney</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://twitter.com/rbkeeney" title="" class="sidebar-tool px-1"><i class="bi bi-twitter"></i></a>
+    <a href="https://www.linkedin.com/in/ryan-brent-keeney/" title="" class="sidebar-tool px-1"><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:keeney.ryan@gmail.com" title="" class="sidebar-tool px-1"><i class="bi bi-envelope"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">About Ryan</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../helpful_links.html" class="sidebar-item-text sidebar-link">Resources and Links</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Data Prep</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/tidymodels_recipes.html" class="sidebar-item-text sidebar-link">Preprocessing data in R</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/missing_data.html" class="sidebar-item-text sidebar-link active">Missing Data</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Supervised Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/anova_introduction.html" class="sidebar-item-text sidebar-link">ANOVA 101</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Unsupervised Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/PCA_eu_food.html" class="sidebar-item-text sidebar-link">PCA with EU Foods</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/ISOMAP_faces.html" class="sidebar-item-text sidebar-link">ISOMAP vs PCA</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">NLP</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../posts/avatar_vader.html" class="sidebar-item-text sidebar-link">VADAR Sentiment Scores</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#types-of-missing-data" id="toc-types-of-missing-data" class="nav-link" data-scroll-target="#types-of-missing-data">Types of missing data</a></li>
+  <li><a href="#patterns-in-missing-data" id="toc-patterns-in-missing-data" class="nav-link" data-scroll-target="#patterns-in-missing-data">Patterns in missing data</a></li>
+  </ul></li>
+  <li><a href="#methods-for-handling-missing-data" id="toc-methods-for-handling-missing-data" class="nav-link" data-scroll-target="#methods-for-handling-missing-data">Methods for handling missing data</a>
+  <ul class="collapse">
+  <li><a href="#example-loading-and-preparing-data" id="toc-example-loading-and-preparing-data" class="nav-link" data-scroll-target="#example-loading-and-preparing-data">Example: Loading and Preparing Data</a></li>
+  <li><a href="#omit-missing-data" id="toc-omit-missing-data" class="nav-link" data-scroll-target="#omit-missing-data">Omit missing data</a>
+  <ul class="collapse">
+  <li><a href="#example-omit" id="toc-example-omit" class="nav-link" data-scroll-target="#example-omit">Example: Omit</a></li>
+  </ul></li>
+  <li><a href="#use-categorical-variables-to-indicate-missing-data" id="toc-use-categorical-variables-to-indicate-missing-data" class="nav-link" data-scroll-target="#use-categorical-variables-to-indicate-missing-data">Use categorical variables to indicate missing data</a>
+  <ul class="collapse">
+  <li><a href="#example-categorical-value" id="toc-example-categorical-value" class="nav-link" data-scroll-target="#example-categorical-value">Example: Categorical value</a></li>
+  <li><a href="#example-categorical-value-for-numeric-data" id="toc-example-categorical-value-for-numeric-data" class="nav-link" data-scroll-target="#example-categorical-value-for-numeric-data">Example: Categorical value for numeric data</a></li>
+  </ul></li>
+  <li><a href="#estimate-missing-data" id="toc-estimate-missing-data" class="nav-link" data-scroll-target="#estimate-missing-data">Estimate missing data</a>
+  <ul class="collapse">
+  <li><a href="#general-guidelines-for-imputation" id="toc-general-guidelines-for-imputation" class="nav-link" data-scroll-target="#general-guidelines-for-imputation">General guidelines for imputation</a></li>
+  <li><a href="#approaches-to-imputation" id="toc-approaches-to-imputation" class="nav-link" data-scroll-target="#approaches-to-imputation">Approaches to imputation</a></li>
+  <li><a href="#example-estimation-imputation" id="toc-example-estimation-imputation" class="nav-link" data-scroll-target="#example-estimation-imputation">Example: Estimation (Imputation)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#summarizing-methods" id="toc-summarizing-methods" class="nav-link" data-scroll-target="#summarizing-methods">Summarizing Methods</a></li>
+  <li><a href="#citations" id="toc-citations" class="nav-link" data-scroll-target="#citations">Citations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Missing Data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ryan Keeney </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In this post, we will review types of missing data and methods for dealing with missing data. Data is often missing, wrong, and generally just has a lot of problems.</p>
+<ul>
+<li><p>Measurement gauges break down</p></li>
+<li><p>Recording errors occur during transmission, data entry, and storage.</p></li>
+<li><p>Human interaction causes a variety of challenges such as incorrect inputs, withheld or unavailable data, or medical history.</p></li>
+</ul>
+<blockquote class="blockquote">
+<p><em>This post does not deal with censored data. Censored data occurs when an data point has not yet been observed. For example, if you are studying a components reliability, it may be unrealistic to run all the components to failure. If a test is suspended without the component failing, then it’s actual failure point is censored - you only know the lower-bound of the components life-time. Bayesian approaches are particularly effective when censored data occurs in time-to-event applications such as reliability theory, survival theory (healthcare outcomes), and geoscientific predictions (when will Mount Rainier erupt next?).</em></p>
+</blockquote>
+<section id="types-of-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-missing-data">Types of missing data</h2>
+<p><strong>Missing Completely At Random (MCAR)</strong>: Missingness does not depend on observed or unobserved data. There is no systematic differences between what is observed and what is not.</p>
+<ul>
+<li><p>Easy to deal with</p></li>
+<li><p>Ignorable missingness</p></li>
+</ul>
+<p><strong>Missing At Random (MAR)</strong>: Missingness depends only on the observed data. MAR occurs when the missingness is <strong>not</strong> random - there are systematic differences between what is observed and what is not - but where missingness can be fully accounted for by variables where there is complete information.</p>
+<ul>
+<li><p>Easy to deal with</p></li>
+<li><p>Ignorable missingness</p></li>
+</ul>
+<p>The missing data correlated to other data in the data set. For example, perhaps it’s dangerous (to us) to measure the bills of large and aggressive penguins, so that variable may be missing or inaccurately measured for those types of penguins.</p>
+<p><strong>Missing Not At Random (MNAR)</strong>: Neither MCAR, nor MAR hold; missingness may depend on the data that is missing - there are systematic differences between what is observed and what is not - and the causes are not accounted for. Usually, MNAR indicates that the situations at which missingness occurs depends on hidden or unobserved causes. This is the most dangerous and difficult type of missingness.</p>
+<ul>
+<li><p>Difficult to deal with</p></li>
+<li><p>Non-ignorable missingness</p></li>
+</ul>
+<p>When the data is Missing Not At Random (MNAR), which missing values may depend on other factors such as data collection design, reporting biases, selection biases.</p>
+</section>
+<section id="patterns-in-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="patterns-in-missing-data">Patterns in missing data</h2>
+<p>Some factors that are more likely to be missing (e.g.&nbsp;due to difficulty of collection, or isn’t standard to be collected).</p>
+<p>Other factor types are more likely to be missing as well for more complex reasons (e.g.&nbsp;bias for or not providing income levels, a radar gun used for speeds outside its operating range, death date won’t be recorded for living patients). This results in bias, and must be accounted for differently.</p>
+</section>
+</section>
+<section id="methods-for-handling-missing-data" class="level1">
+<h1>Methods for handling missing data</h1>
+<p>Ideally, missing data has been discussed, planned for, and negated <em>well in advance</em> of the modeling stage. However, missing data is a reality for data scientists even in the best situations. We’ll be covering three common methods for handling missing data, discuss their pros and cos, and demo them in R.</p>
+<ol type="1">
+<li>Omit missing data</li>
+<li>Use categorical variables to indicate missing data</li>
+<li>Estimate (impute) missing data</li>
+</ol>
+<section id="example-loading-and-preparing-data" class="level3">
+<h3 class="anchored" data-anchor-id="example-loading-and-preparing-data">Example: Loading and Preparing Data</h3>
+<p>I’ll be using the <a href="https://www.tidymodels.org/start/recipes/">recipe</a> library from <a href="https://www.tidymodels.org/">tidymodels</a>, which was previously discussed <a href="https://rbkeeney1.github.io/quartoblog/posts/tidymodels_recipes.html">here</a>, and the <a href="https://allisonhorst.github.io/palmerpenguins/">palmerpenguins</a> data as our example data.</p>
+<p>First, let’s load the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins) <span class="co"># data, loads into 'penguins' and 'penguins_raw'</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels) <span class="co"># preprocessing recipes and other tools</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data contain information for 344 penguins. There are 3 different species of penguins, collected from 3 islands in the Palmer Archipelago, Antarctica. It includes size measurements for adult foraging penguins near Palmer Station, Antarctica.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># features available</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [344 x 7] (S3: tbl_df/tbl/data.frame)
+ $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+ $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+ $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+ $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+ $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...</code></pre>
+</div>
+</div>
+<p>The data contains 333 complete cases, with 19 missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count NA by variable</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(penguins))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          species            island    bill_length_mm     bill_depth_mm 
+                0                 0                 2                 2 
+flipper_length_mm       body_mass_g               sex 
+                2                 2                11 </code></pre>
+</div>
+</div>
+<p>Since I want full control over the data, I’m going to omit the 19 missing values, split the data into test and training sets, then intentionally set up multiple missing data scenarios for comparison.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove NAs from penguins</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> penguins <span class="sc">|&gt;</span> <span class="fu">na.omit</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Put 3/4 of the data into the training set </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>, <span class="at">strata =</span> species)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frames for the two sets</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>data_train <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>data_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>scenario</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># no missing</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_train_full <span class="ot">&lt;-</span> data_train</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># missing data</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>data_train_missing <span class="ot">&lt;-</span> data_train</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drop 20% of island</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>island[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">49</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drop 10% of bill length and depth</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>bill_length_mm[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">24</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>bill_depth_mm[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">24</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drop 5% of all others</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>flipper_length_mm[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">12</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>body_mass_g[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">12</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>data_train_missing<span class="sc">$</span>sex[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data_train_missing), <span class="dv">12</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(data_train_missing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          species            island    bill_length_mm     bill_depth_mm 
+                0                49                24                24 
+flipper_length_mm       body_mass_g               sex 
+               12                12                12 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set up base recipe</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rec_base <span class="ot">&lt;-</span> <span class="fu">recipe</span>(species<span class="sc">~</span>., <span class="at">data=</span>data_train_missing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="omit-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="omit-missing-data">Omit missing data</h2>
+<p>The first option is to simply omit or discard the missing data. That’s easy to implement and doesn’t potentially induce errors. However, you have to weight this against the risk of losing too many data points - many large data have hundreds or thousands of variables, if you removed any data point with a missing variables you could eliminate practically the entire data. Additionally, simply removing data creates the potential for for censored or biased missing data.</p>
+<section id="example-omit" class="level3">
+<h3 class="anchored" data-anchor-id="example-omit">Example: Omit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rec_omit <span class="ot">&lt;-</span> rec_base <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_naomit</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>data_omit <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_omit, <span class="at">new_data=</span><span class="cn">NULL</span>) </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># we lose about 100 data points if we choose to omit all the missing data!</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>data_omit <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 145</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data_train_full <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 249</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="use-categorical-variables-to-indicate-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="use-categorical-variables-to-indicate-missing-data">Use categorical variables to indicate missing data</h2>
+<p>The missing data can be biased! To account for that we can include interactions.</p>
+<p>If we include interaction terms between the new categorical variable and all other variables, then essentially we’re creating two separate models. One for when there’s missing data in this variable and one for when there isn’t. So it’s really like a tree model with a single branch.</p>
+<section id="example-categorical-value" class="level3">
+<h3 class="anchored" data-anchor-id="example-categorical-value">Example: Categorical value</h3>
+<p>Here, I build a categorical missing value for island.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rec_cat <span class="ot">&lt;-</span> rec_base <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to character (easier)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">island =</span> <span class="fu">as.character</span>(island)) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Change NA -&gt; "Missing"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">island =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(island),<span class="st">'Missing'</span>,island)) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># covert back to factor</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">island =</span> <span class="fu">as.factor</span>(island)) <span class="sc">|&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dummy step with one hot encoding</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(island,<span class="at">one_hot =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set interaction term between the missing island category and all other vars</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span>island_Missing<span class="sc">:</span><span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>data_cat <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_cat, <span class="at">new_data=</span><span class="cn">NULL</span>)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># these are the new variables for the model</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>data_cat <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "bill_length_mm"                     "bill_depth_mm"                     
+ [3] "flipper_length_mm"                  "body_mass_g"                       
+ [5] "sex"                                "species"                           
+ [7] "island_Biscoe"                      "island_Dream"                      
+ [9] "island_Missing"                     "island_Torgersen"                  
+[11] "island_Missing_x_bill_length_mm"    "island_Missing_x_bill_depth_mm"    
+[13] "island_Missing_x_flipper_length_mm" "island_Missing_x_body_mass_g"      
+[15] "island_Missing_x_sexmale"           "island_Missing_x_island_Biscoe"    
+[17] "island_Missing_x_island_Dream"      "island_Missing_x_island_Torgersen" </code></pre>
+</div>
+</div>
+</section>
+<section id="example-categorical-value-for-numeric-data" class="level3">
+<h3 class="anchored" data-anchor-id="example-categorical-value-for-numeric-data">Example: Categorical value for numeric data</h3>
+<p>For numerical values, set NA = 0 and then add in a missing column. In this example, I create a missing term for bill length, then create the required interaction terms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rec_cat_num <span class="ot">&lt;-</span> rec_base <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set up missing category</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">bill_length_missing =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(bill_length_mm),<span class="st">'Yes'</span>,<span class="st">'No'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set bill length -&gt; 0 if NA</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">bill_length_mm =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(bill_length_mm),<span class="dv">0</span>,bill_length_mm)) <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert the missing category to a factor</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">bill_length_missing =</span> <span class="fu">as.factor</span>(bill_length_missing)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dummy step with one hot encoding</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(bill_length_missing,<span class="at">one_hot =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set interaction term between the missing  category and all other vars</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span>bill_length_missing_Yes<span class="sc">:</span><span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>data_cat_num <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_cat_num, <span class="at">new_data=</span><span class="cn">NULL</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># these are the new variables for the model</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>data_cat_num <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "island"                                          
+ [2] "bill_length_mm"                                  
+ [3] "bill_depth_mm"                                   
+ [4] "flipper_length_mm"                               
+ [5] "body_mass_g"                                     
+ [6] "sex"                                             
+ [7] "species"                                         
+ [8] "bill_length_missing_No"                          
+ [9] "bill_length_missing_Yes"                         
+[10] "bill_length_missing_Yes_x_islandDream"           
+[11] "bill_length_missing_Yes_x_islandTorgersen"       
+[12] "bill_length_missing_Yes_x_bill_length_mm"        
+[13] "bill_length_missing_Yes_x_bill_depth_mm"         
+[14] "bill_length_missing_Yes_x_flipper_length_mm"     
+[15] "bill_length_missing_Yes_x_body_mass_g"           
+[16] "bill_length_missing_Yes_x_sexmale"               
+[17] "bill_length_missing_Yes_x_bill_length_missing_No"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="estimate-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="estimate-missing-data">Estimate missing data</h2>
+<section id="general-guidelines-for-imputation" class="level3">
+<h3 class="anchored" data-anchor-id="general-guidelines-for-imputation">General guidelines for imputation</h3>
+<ul>
+<li><p>Data is used twice, so it can lead to over-fitting</p></li>
+<li><p>Limit the amount of imputation to no more than 5% per factor</p></li>
+<li><p>If more than 5% is missing, use omission or categorical value methods</p></li>
+</ul>
+</section>
+<section id="approaches-to-imputation" class="level3">
+<h3 class="anchored" data-anchor-id="approaches-to-imputation">Approaches to imputation</h3>
+<ul>
+<li><p><strong>Mid-range value</strong>: use mean, median (numeric), or mode (categorical)</p></li>
+<li><p><strong>Regression</strong>: Reduce or eliminate the problem of bias by using other factors to predict the missing value. Essentially, build a model for each factor.</p></li>
+<li><p><strong>Perturbation</strong>: Accounts for bias and variability. Essentially, add perturbation to each imputed variable (e.g.&nbsp;adjust up/down a random amount from the normally distributed variation).</p></li>
+</ul>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 23%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Pro</th>
+<th>Con</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mid-range value</td>
+<td><ul>
+<li>Hedge against being too wrong</li>
+<li>Easy to compute</li>
+</ul></td>
+<td><ul>
+<li>Biased imputation (e.g.&nbsp;if high-income people are less likely to answer the mean/median will be underestimate the value)</li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Regression</td>
+<td><ul>
+<li>Reduce or eliminate the problem of bias</li>
+</ul></td>
+<td><ul>
+<li><p>Complex to build, fit, validate, and test additional models</p></li>
+<li><p>Does not capture all the variability</p></li>
+<li><p>Uses the data twice, so it could over-fit</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>Perturbation</td>
+<td><ul>
+<li>More accurate variability</li>
+</ul></td>
+<td><ul>
+<li>Less accurate on average</li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Do we add additional error from imputation and perturbation?</strong></p>
+<p>Yup! <code>Total error = Imputation error + perturbation error + model error</code>. However, regular data almost certainly has errors as well. It’s up to you as the data scientist to decide what trade-offs to make in a given situation.</p>
+<p>There are many approaches to imputation. For example, advanced methods like multivariate imputation by chained equations (MICE) can impute multiple factor values together.</p>
+</section>
+<section id="example-estimation-imputation" class="level3">
+<h3 class="anchored" data-anchor-id="example-estimation-imputation">Example: Estimation (Imputation)</h3>
+<p>Let’s estimate a few of the numerical values with different methods. <a href="https://rsample.tidymodels.org/reference/permutations.html">Permutation sampling</a> is covered in <code>rsample</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rec_impute <span class="ot">&lt;-</span> rec_base <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute bill length and depth with mean</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mean</span>(bill_length_mm,bill_depth_mm,flipper_length_mm) <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute sex with mode</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mode</span>(sex) <span class="sc">|&gt;</span> </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute body mass with linear model mass ~ sex + bill_length_mm +bill_depth_mm</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_linear</span>(body_mass_g, <span class="at">impute_with =</span> <span class="fu">imp_vars</span>(sex,bill_length_mm,bill_depth_mm)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># impute island with knn</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_knn</span>(island, <span class="at">neighbors =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># train</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>(data_train_missing)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to missing data</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>data_impute <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_impute, <span class="at">new_data=</span><span class="cn">NULL</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(data_impute))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           island    bill_length_mm     bill_depth_mm flipper_length_mm 
+                0                 0                 0                 0 
+      body_mass_g               sex           species 
+                0                 0                 0 </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="summarizing-methods" class="level1">
+<h1>Summarizing Methods</h1>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 20%">
+<col style="width: 69%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Pro</th>
+<th>Con</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Discard</td>
+<td><ul>
+<li><p>Not potentially introducing errors</p></li>
+<li><p>Easy to implement</p></li>
+</ul></td>
+<td><ul>
+<li><p>Don’t want to lose to many data points</p></li>
+<li><p>Potential for censored or biased missing data</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Categorical Value</td>
+<td><ul>
+<li>Works well if factor is categorical</li>
+</ul></td>
+<td><ul>
+<li><p>Difficult for continuous data, but could set to zero an add a new factor to show if it’s missing or not.</p></li>
+<li><p>Potential for censored or biased missing data (coefficients of other variables are pulled up/down to try and account for the missing data)</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>Estimate (Impute)</td>
+<td><ul>
+<li>Reduces bias</li>
+</ul></td>
+<td><ul>
+<li><p>Data is used twice, so it can lead to over-fitting</p></li>
+<li><p>Limit to 5% per factor</p></li>
+<li><p>Per data point, limit to 5% or use omission or categorical variable.</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="citations" class="level1">
+<h1>Citations</h1>
+<p>Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0. https://allisonhorst.github.io/palmerpenguins/. doi: 10.5281/zenodo.3960218.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2023, Ryan Keeney</div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link active" href="https://twitter.com/rbkeeney" aria-current="page">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/ryan-brent-keeney/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:keeney.ryan@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

@@ -22,5 +22,8 @@
   },
   "posts/tidymodels_recipes.qmd": {
     "tidymodels_recipes.html": "9b158899"
+  },
+  "posts/missing_data.qmd": {
+    "missing_data.html": "561cffe7"
   }
 }
