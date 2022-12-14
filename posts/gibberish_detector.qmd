@@ -1,0 +1,113 @@
+---
+title: "Gibberish Detector"
+author: "Ryan Keeney"
+editor: visual
+execute:
+  freeze: true
+---
+
+# Introduction
+
+Surveys may contain responses that are gibberish - unintelligible or meaningless language. It would be useful to identify these entries automatically.
+
+# Basic Gibberish Detector
+
+Our basic gibberish detector will calculate the ratio of real words in string.
+
+## Setup
+
+```{r}
+#| warning: false
+
+library(tidyverse) # basic R useability 
+library(hunspell) # spell checker (and other stuff)
+library(textcat) # language prediction
+```
+
+```{r}
+df <- tibble(
+  id = c('english', 'ipsum', 'gibberish', 'spanish', 'quadratic'),
+  text = c(
+    'Contrary to popular belief, that is not simply random text.',
+    'Et harum quidem rerum facilis est et expedita distinctio',
+    'All mimsy were the borogoves, And the mome raths outgrabe',
+    'es un hermoso dia para ir a caminar en el parque',
+    'Negative b plus or minus the square root of B squared minus four ac over two a'
+  )
+)
+
+# display
+df |> knitr::kable()
+```
+
+Let's create a simple function that returns the ratio of correct words in a given string.
+
+```{r}
+
+word_ratio <- function(input_text, show_output=FALSE){
+  
+  if (show_output==TRUE){ glue::glue('input text: {input_text}') |> print()}
+
+  # replace '-' with space and remove all punctuation 
+  temp <- input_text |> 
+    str_replace("-", " ") |> 
+    str_replace_all("[[:punct:]]", "")
+  
+  if (show_output==TRUE){glue::glue('predicted language: {textcat(temp)}') |> print()}
+  
+  # split string
+  temp <- str_split(temp,' ',simplify = TRUE)
+  
+  # spell check
+  temp <- hunspell_check(temp)
+  
+  # calc ratio
+  ratio_correct = length(temp[temp])/length(temp)
+  
+  if (show_output==TRUE){  glue::glue('correct/total words: {length(temp[temp])}/{length(temp)}') |> print()}
+
+  return(ratio_correct)
+}
+```
+
+Let's test it out.
+
+```{r}
+ratio = word_ratio(input_text = df$text[1], show_output = TRUE)
+print(ratio)
+```
+
+Let's apply our function to our example tibble.
+
+```{r}
+df |> 
+  rowwise() |> 
+  mutate(
+    ratio = word_ratio(text),
+    language = textcat(text),
+    gibberish = ifelse(ratio>0.75,FALSE,TRUE)
+    ) |> 
+  knitr::kable()
+```
+
+## Basic method advantages
+
+1.  Lightweight solution with minimal computational effort
+2.  Adaptable to different languages
+
+## Basic method shortcomings
+
+1.  Dependent on spelling. If a customer inputs 'computr' instead of 'computer', then the basic algorithm will treat it as gibberish. There are methods for compensating for this, such as calculating suggested words through string-to-string edit distance.
+2.  Will not detect gibberish that are real words, but nonsensical. For example 'car shiny computer running tree' doesn't make any sense but will pass our test.
+
+# Advanced Gibberish Detectors
+
+**In progress**
+
+To address the above shortcomings, we could use a more advanced approach. Such as a 2 character markov chain to predict how often characters (or words) occur next to one another.
+
+# References
+
+1.  https://github.com/domanchi/gibberish-detector
+2.  https://github.com/rrenaud/Gibberish-Detector
+3.  https://github.com/glender/gibber

@@ -25,5 +25,8 @@
   },
   "posts/missing_data.qmd": {
     "missing_data.html": "561cffe7"
+  },
+  "posts/gibberish_detector.qmd": {
+    "gibberish_detector.html": "61322cf9"
   }
 }

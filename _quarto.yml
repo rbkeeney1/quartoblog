@@ -47,6 +47,8 @@ website:
         contents: 
         - href: posts/avatar_vader.qmd
           text: VADAR Sentiment Scores
+        - href: posts/gibberish_detector.qmd
+          text: Gibberish Detector
 
           
   page-footer: 
